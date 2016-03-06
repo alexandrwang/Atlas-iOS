@@ -76,6 +76,7 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     if (self) {
         _locationShown = kCLLocationCoordinate2DInvalid;
         self.clipsToBounds = YES;
+        
 
         _bubbleViewLabel = [[UILabel alloc] init];
         _bubbleViewLabel.numberOfLines = 0;
@@ -141,6 +142,7 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     [self applyImageWidthConstraint:NO];
     self.playView.hidden = YES;
     [self setBubbleViewContentType:ATLBubbleViewContentTypeText];
+    
 }
 
 - (void)updateWithAttributedText:(NSAttributedString *)text
@@ -473,6 +475,8 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:_bubbleViewLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-ATLMessageBubbleLabelVerticalPadding];
     bottomConstraint.priority = 800;
     [self addConstraint:bottomConstraint];
+    
+    _gradient.frame = self.bounds;
 }
 
 - (void)configureBubbleImageViewConstraints
@@ -482,6 +486,8 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_bubbleImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_bubbleImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
     _imageWidthConstraint = [NSLayoutConstraint constraintWithItem:_bubbleImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0];
+    
+    _gradient.frame = self.bounds;
 }
 
 - (void)configureProgressViewConstraints
@@ -490,6 +496,8 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_progressView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_progressView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:64.0f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_progressView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:64.0f]];
+    
+    _gradient.frame = self.bounds;
 }
 
 - (void)configurePlayViewConstraints
@@ -498,6 +506,8 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_playView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_playView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:64.0f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_playView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:64.0f]];
+    
+    _gradient.frame = self.bounds;
 }
 
 @end

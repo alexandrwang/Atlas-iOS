@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+
 NSString *const ATLConversationName = @"ATLConversationName";
 
 UIColor *ATLBlueColor()
@@ -53,5 +56,13 @@ UIFont *ATLMediumFont(CGFloat size)
 UIFont *ATLBoldFont(CGFloat size)
 {
     return [UIFont fontWithName:@"HelveticaNeue-Medium" size:size];
+}
+
+CAGradientLayer *AVAGradient()
+{
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0x0F86DE) CGColor], (id)[UIColorFromRGB(0x0AA5D5) CGColor], nil];
+    return gradient;
+    
 }
 

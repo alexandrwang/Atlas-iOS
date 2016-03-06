@@ -28,7 +28,7 @@
 
 @end
 
-static NSString *const ATLPlaceholderText = @"Enter Message";
+static NSString *const ATLPlaceholderText = @"Send something to Ava";
 
 @implementation ATLMessageComposeTextView
 
@@ -52,6 +52,11 @@ static NSString *const ATLPlaceholderText = @"Enter Message";
         [self addSubview:self.placeholderLabel];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextDidChange:) name:UITextViewTextDidChangeNotification object:self];
+        
+        self.backgroundColor = [UIColor whiteColor];
+        
+        [self.layer setBorderWidth:0.0f];
+        
     }
     return self;
 }

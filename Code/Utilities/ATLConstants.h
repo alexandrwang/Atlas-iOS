@@ -37,5 +37,9 @@ UIFont *ATLLightFont(CGFloat size);
 
 UIFont *ATLMediumFont(CGFloat size);
 
+CAGradientLayer *AVAGradient();
+
 UIFont * ATLBoldFont(CGFloat size);
 NS_ASSUME_NONNULL_END
+
+

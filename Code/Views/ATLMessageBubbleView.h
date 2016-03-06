@@ -107,5 +107,7 @@ extern NSString *const ATLUserDidTapPhoneNumberNotification;
  */
 @property (nonatomic, nullable) NSArray <UIMenuItem*> *menuControllerActions;
 
+@property (nonatomic) CAGradientLayer *gradient;
+
 @end
 NS_ASSUME_NONNULL_END

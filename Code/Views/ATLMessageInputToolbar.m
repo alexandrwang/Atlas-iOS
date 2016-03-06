@@ -87,7 +87,7 @@ static CGFloat const ATLButtonHeight = 28.0f;
         self.textInputView.accessibilityLabel = ATLMessageInputToolbarTextInputView;
         self.textInputView.delegate = self;
         self.textInputView.layer.borderColor = ATLGrayColor().CGColor;
-        self.textInputView.layer.borderWidth = 0.5;
+        self.textInputView.layer.borderWidth = 0;
         self.textInputView.layer.cornerRadius = 5.0f;
         [self addSubview:self.textInputView];
         
@@ -102,6 +102,12 @@ static CGFloat const ATLButtonHeight = 28.0f;
         // Calling sizeThatFits: or contentSize on the displayed UITextView causes the cursor's position to momentarily appear out of place and prevent scrolling to the selected range. So we use another text view for height calculations.
         self.dummyTextView = [[ATLMessageComposeTextView alloc] init];
         self.maxNumberOfLines = 8;
+        
+        self.barTintColor = [UIColor whiteColor];
+        
+        self.clipsToBounds = YES;
+        self.translucent = NO;
+
     }
     return self;
 }

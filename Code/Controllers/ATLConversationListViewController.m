@@ -85,7 +85,8 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
     _displaysAvatarItem = NO;
     _allowsEditing = YES;
     _rowHeight = 76.0f;
-    _shouldDisplaySearchController = YES;
+    // search
+    _shouldDisplaySearchController = NO;
     _hasAppeared = NO;
 }
 
@@ -387,6 +388,7 @@ NSString *const ATLConversationListViewControllerDeletionModeEveryone = @"Everyo
 {
     if ([self.delegate respondsToSelector:@selector(conversationListViewController:didSelectConversation:)]){
         LYRConversation *conversation = [self.queryController objectAtIndexPath:indexPath];
+        NSLog(@"url is %@" , [conversation.identifier absoluteString]);
         [self.delegate conversationListViewController:self didSelectConversation:conversation];
     }
 }

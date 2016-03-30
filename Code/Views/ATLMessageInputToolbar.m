@@ -309,14 +309,16 @@ static CGFloat const ATLButtonHeight = 28.0f;
     } else if (textView.text.length == 0 && [self.inputToolBarDelegate respondsToSelector:@selector(messageInputToolbarDidEndTyping:)]) {
         [self.inputToolBarDelegate messageInputToolbarDidEndTyping:self];
     }
-
-    [self setNeedsLayout];
     
+    [self setNeedsLayout];
+
     // Workaround for iOS 7.1 not scrolling bottom line into view when entering text. Note that in textViewDidChangeSelection: if the selection to the bottom line is due to entering text then the calculation of the bottom content offset won't be accurate since the content size hasn't yet been updated. Content size has been updated by the time this method is called so our calculation will work.
     NSRange end = NSMakeRange(textView.text.length, 0);
     if (NSEqualRanges(textView.selectedRange, end)) {
-        CGPoint bottom = CGPointMake(0, textView.contentSize.height - CGRectGetHeight(textView.frame));
+        textView.contentSize = CGSizeMake(textView.frame.size.width, textView.frame.size.height);
+        CGPoint bottom = CGPointMake(0, fabs(textView.contentSize.height - CGRectGetHeight(textView.frame)));
         [textView setContentOffset:bottom animated:NO];
+
     }
 }
 
@@ -325,13 +327,12 @@ static CGFloat const ATLButtonHeight = 28.0f;
     // Workaround for iOS 7.1 not scrolling bottom line into view. Note that this only works for a selection change not due to text entry (in other words e.g. when using an external keyboard's bottom arrow key). The workaround in textViewDidChange: handles selection changes due to text entry.
     NSRange end = NSMakeRange(textView.text.length, 0);
     if (NSEqualRanges(textView.selectedRange, end)) {
-        CGPoint bottom = CGPointMake(0, textView.contentSize.height - CGRectGetHeight(textView.frame));
+        textView.contentSize = CGSizeMake(textView.frame.size.width, textView.frame.size.height);
+        CGPoint bottom = CGPointMake(0, fabs(textView.contentSize.height - CGRectGetHeight(textView.frame)));
         [textView setContentOffset:bottom animated:NO];
         return;
     }
 
-    // Workaround for automatic scrolling not occurring in some cases.
-    [textView scrollRangeToVisible:textView.selectedRange];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange

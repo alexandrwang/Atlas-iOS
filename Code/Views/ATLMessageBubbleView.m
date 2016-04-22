@@ -21,6 +21,8 @@
 #import "ATLMessageBubbleView.h"
 #import "ATLMessagingUtilities.h"
 #import "ATLPlayView.h"
+#import "GradientView.h"
+#import "ShapeView.h"
 
 CGFloat const ATLMessageBubbleLabelVerticalPadding = 8.0f;
 CGFloat const ATLMessageBubbleLabelHorizontalPadding = 13.0f;
@@ -40,6 +42,8 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     ATLBubbleViewContentTypeLocation,
 };
 
+
+
 @interface ATLMessageBubbleView () <UIGestureRecognizerDelegate>
 
 @property (nonatomic) ATLBubbleViewContentType contentType;
@@ -54,7 +58,10 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
 @property (nonatomic) MKMapSnapshotter *snapshotter;
 @property (nonatomic) ATLProgressView *progressView;
 @property (nonatomic) ATLPlayView *playView;
+@property (nonatomic) GradientView *gradientView;
+@property (nonatomic) ShapeView *shapeMaskingView;
 @property (nonatomic, weak) ATLMessageComposeTextView *weakTextView;
+@property (nonatomic) CGSize previousBoundsSize;
 
 @end
 
@@ -75,8 +82,14 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
     self = [super initWithFrame:frame];
     if (self) {
         _locationShown = kCLLocationCoordinate2DInvalid;
-        self.clipsToBounds = YES;
         
+        _shapeMaskingView = [[ShapeView alloc] initWithFrame:self.bounds];
+        _shapeMaskingView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.maskView = _shapeMaskingView;
+
+        _gradientView = [[GradientView alloc] initWithFrame:self.bounds];
+        _gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self addSubview:_gradientView];
 
         _bubbleViewLabel = [[UILabel alloc] init];
         _bubbleViewLabel.numberOfLines = 0;
@@ -126,6 +139,17 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
         [self prepareForReuse];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if (!CGSizeEqualToSize(self.previousBoundsSize, self.bounds.size)) {
+        self.shapeMaskingView.frame = self.bounds;
+        self.shapeMaskingView.shapeLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.shapeMaskingView.bounds byRoundingCorners:self.corners cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)].CGPath;
+        self.previousBoundsSize = self.bounds.size;
+    }
 }
 
 - (void)updateProgressIndicatorWithProgress:(float)progress visible:(BOOL)visible animated:(BOOL)animated
@@ -278,6 +302,12 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
         }
     }
     _menuControllerActions = menuControllerActions;
+}
+
+- (void)setCorners:(UIRectCorner)corners
+{
+    _corners = corners;
+    self.shapeMaskingView.shapeLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.shapeMaskingView.bounds byRoundingCorners:self.corners cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)].CGPath;
 }
 
 #pragma mark - Copy / Paste Support

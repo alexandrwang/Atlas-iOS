@@ -23,6 +23,7 @@
 #import "ATLConstants.h"
 #import "ATLMessagingUtilities.h"
 #import "ATLParticipant.h"
+#import "GradientView/GradientView.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -66,28 +67,17 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
 {
     // Default UIAppearance
     _bubbleViewColor = ATLBlueColor();
-    _bubbleViewCornerRadius = 17.0f;
-    _bubbleViewGradient = AVAGradient();
-    
-
     
     _bubbleView = [[ATLMessageBubbleView alloc] init];
+    _bubbleView.cornerRadius = 20;
+    _bubbleView.gradientView.gradientLayer.colors = @[(id)[UIColorFromRGB(0x0F86DE) CGColor], (id)[UIColorFromRGB(0x0AA5D5) CGColor]];
     _bubbleView.translatesAutoresizingMaskIntoConstraints = NO;
-    _bubbleView.layer.cornerRadius = _bubbleViewCornerRadius;
-    _bubbleView.backgroundColor = _bubbleViewColor;
-    
-    // Drawing code
-//    CAShapeLayer * maskLayer = [CAShapeLayer layer];
-//    maskLayer.path = [UIBezierPath bezierPathWithRoundedRect: self.bounds byRoundingCorners: UIRectCornerTopLeft | UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii: (CGSize){20.0, 20.0}].CGPath;
-//    
-//    _bubbleView.layer.mask = maskLayer;
-    
+
     [self.contentView addSubview:_bubbleView];
     
     _avatarImageView = [[ATLAvatarImageView alloc] init];
     _avatarImageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_avatarImageView];
-    
     
     [self configureLayoutConstraints];
 }
@@ -103,45 +93,6 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
 {
     _bubbleViewColor = bubbleViewColor;
     self.bubbleView.backgroundColor = bubbleViewColor;
-}
-
-- (void)setBubbleViewGradient:(CAGradientLayer *)bubbleViewGradient
-{
-//    self.bubbleView.backgroundColor = [UIColor clearColor];
-    
-//    _bubbleViewGradient = bubbleViewGradient;
-//    _bubbleViewGradient.frame = _bubbleView.bounds;
-//    
-//    
-//    [_bubbleView.layer insertSublayer:_bubbleViewGradient atIndex:0];
-    
-    if([self.layer.sublayers count] >0)
-    {
-        if([[self.layer.sublayers objectAtIndex:0] isKindOfClass:[CAGradientLayer class]])
-        {
-            [[self.layer.sublayers objectAtIndex:0] removeFromSuperlayer];
-            //            return;
-        }
-    }
-    
-    
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0x0F86DE) CGColor], (id)[UIColorFromRGB(0x0AA5D5) CGColor], nil];
-    
-    gradient.frame = _bubbleView.bounds;
-    gradient.frame = CGRectMake(0, 0, 2000, _bubbleView.frame.size.height + 10);
-    bubbleViewGradient.frame = _bubbleView.bounds;
-    
-    
-    _bubbleViewGradient = gradient;
-    
-    [_bubbleView.layer insertSublayer:_bubbleViewGradient atIndex:0];
-}
-
-- (void)setBubbleViewCornerRadius:(CGFloat)bubbleViewCornerRadius
-{
-    _bubbleViewCornerRadius = bubbleViewCornerRadius;
-    self.bubbleView.layer.cornerRadius = bubbleViewCornerRadius;
 }
 
 - (void)updateBubbleWidth:(CGFloat)bubbleWidth
@@ -197,10 +148,6 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    
-    _bubbleViewGradient.frame = _bubbleView.bounds;
-    
-
 }
 
 - (void)configureCellForType:(ATLCellType)cellType
@@ -215,12 +162,16 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     
     switch (cellType) {
         case ATLIncomingCellType:
+            self.bubbleView.gradientView.hidden = YES;
+            self.bubbleView.corners = UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomRight;
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLAvatarImageLeadPadding]];
             self.bubbleWithAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarImageView attribute:NSLayoutAttributeRight multiplier:1.0 constant:ATLAvatarImageTailPadding];
             [self.contentView addConstraint:self.bubbleWithAvatarLeadConstraint];
             self.bubbleWithoutAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLMessageCellHorizontalMargin];
             break;
         case ATLOutgoingCellType:
+            self.bubbleView.gradientView.hidden = NO;
+            self.bubbleView.corners = UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomLeft;
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLAvatarImageLeadPadding]];
             self.bubbleWithAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.bubbleView attribute: NSLayoutAttributeRight multiplier:1.0 constant:ATLAvatarImageTailPadding];
             [self.contentView addConstraint:self.bubbleWithAvatarLeadConstraint];

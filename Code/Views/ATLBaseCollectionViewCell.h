@@ -33,8 +33,6 @@ extern CGFloat const ATLMessageCellHorizontalMargin;
 @property (nonatomic) UIColor *bubbleViewColor UI_APPEARANCE_SELECTOR;
 
 
-@property (nonatomic) CAGradientLayer *bubbleViewGradient UI_APPEARANCE_SELECTOR;
-
 /**
  @abstract The corner radius of the bubble view displayed in the cell. Default is 16.
  */

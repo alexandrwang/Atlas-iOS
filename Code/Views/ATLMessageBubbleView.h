@@ -21,6 +21,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "ATLProgressView.h"
+@class GradientView;
 
 NS_ASSUME_NONNULL_BEGIN
 extern CGFloat const ATLMessageBubbleLabelVerticalPadding;
@@ -97,6 +98,12 @@ extern NSString *const ATLUserDidTapPhoneNumberNotification;
  @default NSTextCheckingTypeLink
  */
 @property (nonatomic) NSTextCheckingType textCheckingTypes;
+
+@property (nonatomic) UIRectCorner corners;
+
+@property (nonatomic) CGFloat cornerRadius;
+
+@property (nonatomic, readonly) GradientView *gradientView;
 
 /**
  @abstract `UIMenuItem` objects that the application wants to display on long press, overriding the default copy functionality.

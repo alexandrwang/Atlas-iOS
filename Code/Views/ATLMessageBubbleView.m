@@ -24,8 +24,8 @@
 #import "GradientView.h"
 #import "ShapeView.h"
 
-CGFloat const ATLMessageBubbleLabelVerticalPadding = 8.0f;
-CGFloat const ATLMessageBubbleLabelHorizontalPadding = 13.0f;
+CGFloat const ATLMessageBubbleLabelVerticalPadding = 12.0f;
+CGFloat const ATLMessageBubbleLabelHorizontalPadding = 18.0f;
 CGFloat const ATLMessageBubbleLabelWidthMargin = 1.0f;
 
 CGFloat const ATLMessageBubbleMapWidth = 200.0f;

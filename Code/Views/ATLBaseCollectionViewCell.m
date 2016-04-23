@@ -70,7 +70,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     
     _bubbleView = [[ATLMessageBubbleView alloc] init];
     _bubbleView.cornerRadius = 20;
-    _bubbleView.gradientView.gradientLayer.colors = @[(id)[UIColorFromRGB(0x0F86DE) CGColor], (id)[UIColorFromRGB(0x0AA5D5) CGColor]];
+    _bubbleView.gradientView.gradientLayer.colors = @[(id)[UIColorFromRGB(0x1D8DE0) CGColor], (id)[UIColorFromRGB(0x0AA5D5) CGColor]];
     _bubbleView.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self.contentView addSubview:_bubbleView];
@@ -163,7 +163,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     switch (cellType) {
         case ATLIncomingCellType:
             self.bubbleView.gradientView.hidden = YES;
-            self.bubbleView.corners = UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomRight;
+            self.bubbleView.corners = UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomRight | UIRectCornerBottomLeft;
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:ATLAvatarImageLeadPadding]];
             self.bubbleWithAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarImageView attribute:NSLayoutAttributeRight multiplier:1.0 constant:ATLAvatarImageTailPadding];
             [self.contentView addConstraint:self.bubbleWithAvatarLeadConstraint];
@@ -171,7 +171,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
             break;
         case ATLOutgoingCellType:
             self.bubbleView.gradientView.hidden = NO;
-            self.bubbleView.corners = UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomLeft;
+            self.bubbleView.corners = UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomLeft | UIRectCornerBottomRight;
             [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLAvatarImageLeadPadding]];
             self.bubbleWithAvatarLeadConstraint = [NSLayoutConstraint constraintWithItem:self.avatarImageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.bubbleView attribute: NSLayoutAttributeRight multiplier:1.0 constant:ATLAvatarImageTailPadding];
             [self.contentView addConstraint:self.bubbleWithAvatarLeadConstraint];

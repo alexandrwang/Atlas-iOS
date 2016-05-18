@@ -44,9 +44,19 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton;
 
 /**
+ @abstract Notifies the receiver that the go back button was tapped.
+ */
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapGoBackButton:(UIButton *)goBackButton;
+
+/**
  @abstract Notifies the receiver that the left accessory button was tapped.
  */
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapLeftAccessoryButton:(UIButton *)leftAccessoryButton;
+
+/**
+ @abstract Notifies the receiver that the keyboard button was tapped.
+ */
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapKeyboardButton:(UIButton *)keyboardButton;
 
 @optional
 
@@ -89,6 +99,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 //-----------------------------
 // UI Customization
 //-----------------------------
+
+/**
+ @abstract The go back button for the keyboard flow.
+ */
+@property (nonatomic) UIButton *goBackButton;
 
 /**
  @abstract The left accessory button for the view. 
@@ -181,6 +196,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  to support UISplitViewController usage.  This property should only be set when subclassing `ATLMessageInputToolbar`.
  */
 @property (nonatomic, weak) UIViewController *containerViewController;
+
+//! Handle keyboard switching / updating:
+
+- (void)switchToCustomKeyboard;
+- (void)switchToDefaultKeyboard;
 
 @end
 NS_ASSUME_NONNULL_END

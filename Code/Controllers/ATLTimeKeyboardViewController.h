@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SpecialistKeyboardCollectionViewCell.h"
+#import "ATLTimeKeyboardCollectionViewCell.h"
 
 @import UIKit;
 
 
-@interface SpecialistButtonsViewController : UIViewController
+@interface ATLTimeKeyboardViewController : UIViewController
 
 
 

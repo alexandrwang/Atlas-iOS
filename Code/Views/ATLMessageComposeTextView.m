@@ -40,14 +40,14 @@ static NSString *const ATLPlaceholderText = @"Send something to Ava";
         self.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17],
                                                                                          NSForegroundColorAttributeName : ATLGrayColor()}];
         self.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4);
-        self.font = [UIFont systemFontOfSize:17];
+        self.font = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0f];
         self.dataDetectorTypes = UIDataDetectorTypeLink;
         self.placeholder = ATLPlaceholderText;
 
         self.placeholderLabel = [UILabel new];
         self.placeholderLabel.font = self.font;
         self.placeholderLabel.text = ATLLocalizedString(self.placeholder, self.placeholder, nil);;
-        self.placeholderLabel.textColor = [UIColor lightGrayColor];
+        self.placeholderLabel.textColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
         self.placeholderLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self addSubview:self.placeholderLabel];
 

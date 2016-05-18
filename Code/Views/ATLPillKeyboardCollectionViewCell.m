@@ -6,18 +6,15 @@
 //
 //
 
-#import "SpecialistKeyboardCollectionViewCell.h"
+#import "ATLPillKeyboardCollectionViewCell.h"
 
-@interface SpecialistKeyboardCollectionViewCell ()
+@interface ATLPillKeyboardCollectionViewCell ()
 
 @property (strong, nonatomic) UILabel *stringLabel;
 
-
 @end
 
-
-
-@implementation SpecialistKeyboardCollectionViewCell
+@implementation ATLPillKeyboardCollectionViewCell
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

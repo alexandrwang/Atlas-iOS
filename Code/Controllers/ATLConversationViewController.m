@@ -31,12 +31,19 @@
 #import "ATLMediaAttachment.h"
 #import "ATLLocationManager.h"
 #import "LYRIdentity+ATLParticipant.h"
-#import "SpecialistButtonsViewController.h"
 
+#import "ATLPillKeyboardViewController.h"
+#import "ATLDateKeyboardViewController.h"
+#import "ATLTimeKeyboardViewController.h"
+#import "ATLLocationKeyboardViewController.h"
+#import "ATLKeyboardFlowViewController.h"
 
 @import AVFoundation;
 
-@interface ATLConversationViewController () <UICollectionViewDataSource, UICollectionViewDelegate, CLLocationManagerDelegate>
+@interface ATLConversationViewController () < UICollectionViewDataSource,
+                                              UICollectionViewDelegate,
+                                              CLLocationManagerDelegate,
+                                              ATLKeyboardFlowViewControllerDelegate >
 
 @property (nonatomic) ATLConversationDataSource *conversationDataSource;
 @property (nonatomic, readwrite) LYRQueryController *queryController;
@@ -55,9 +62,16 @@
 @property (nonatomic) dispatch_queue_t animationQueue;
 @property (nonatomic) BOOL expandingPaginationWindow;
 
+@property (nonatomic) ATLMessageComposeTextView *keyboardInputView;
+@property (nonatomic) UIViewController *customKeyboardInputViewController;
+
 @end
 
-@implementation ATLConversationViewController
+@implementation ATLConversationViewController {
+    ATLMessageInputToolbar *_messageInputToolbar;
+    ATLKeyboardFlowViewController *_keyboardFlowViewController;
+    BOOL _isUsingCustomKeyboard;
+}
 
 static NSInteger const ATLMoreMessagesSection = 0;
 static NSString *const ATLPushNotificationSoundName = @"layerbell.caf";
@@ -121,6 +135,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     _sectionFooters = [NSHashTable weakObjectsHashTable];
     _objectChanges = [NSMutableArray new];
     _animationQueue = dispatch_queue_create("com.atlas.animationQueue", DISPATCH_QUEUE_SERIAL);
+    _isUsingCustomKeyboard = NO;
 }
 
 - (void)loadView
@@ -557,35 +572,50 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     return YES;
 }
 
+- (ATLMessageInputToolbar *)messageInputToolbar {
+    return _messageInputToolbar;
+}
+
+- (void)setMessageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar
+{
+    if (!self.messageInputToolbar) {
+        self.keyboardInputView = messageInputToolbar.textInputView;
+    }
+    _messageInputToolbar = messageInputToolbar;
+}
+
 #pragma mark - ATLMessageInputToolbarDelegate
 
+// Switch to default keyboard.
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapKeyboardButton:(UIButton *)keyboardButton
+{
+    _isUsingCustomKeyboard = NO;
+    [self.messageInputToolbar endEditing:YES];
+    self.messageInputToolbar.textInputView.inputView = nil;
+    [self.messageInputToolbar.textInputView reloadInputViews];
+    [self.messageInputToolbar.textInputView becomeFirstResponder];
+    [messageInputToolbar switchToDefaultKeyboard];
+    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex];
+}
+
+// Switch to custom keyboard.
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapLeftAccessoryButton:(UIButton *)leftAccessoryButton
 {
-    
-    // TODO: LUCY TEMPORARY BUTTON HERE
-    
-//    if (messageInputToolbar.textInputView.isFirstResponder) {
-//        [messageInputToolbar.textInputView resignFirstResponder];
-//    }
-//    
-//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-//                                                             delegate:self
-//                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
-//                                               destructiveButtonTitle:nil
-//                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
-//    [actionSheet showInView:self.view];
-//    actionSheet.tag = ATLPhotoActionSheet;
-    
-    
-    SpecialistButtonsViewController *bvc = [[SpecialistButtonsViewController alloc] init];
-    
-    // make custom view
-    self.messageInputToolbar.textInputView.inputView = bvc.view;
-    bvc.view.backgroundColor = [UIColor whiteColor];
-    
-    [self.messageInputToolbar.textInputView becomeFirstResponder];
-    
-    
+    if (!self.customKeyboardInputViewController) {
+        _keyboardFlowViewController = [[ATLKeyboardFlowViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+        _keyboardFlowViewController.flowDelegate = self;
+        self.customKeyboardInputViewController = _keyboardFlowViewController;
+    }
+
+    if (!self.messageInputToolbar.textInputView.inputView) {
+        _isUsingCustomKeyboard = YES;
+        [self.messageInputToolbar endEditing:YES];
+        self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
+        [self.messageInputToolbar.textInputView reloadInputViews];
+        [self.messageInputToolbar.textInputView becomeFirstResponder];
+        [messageInputToolbar switchToCustomKeyboard];
+        [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex];
+    }
 }
 
 - (UIView *)createButtonView {
@@ -596,23 +626,30 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     return buttonView;
 }
 
-- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton
-{
-    if (!self.conversation) {
-        return;
-    }
-    
-    // If there's no content in the input field, send the location.
-    NSOrderedSet *messages = [self messagesForMediaAttachments:messageInputToolbar.mediaAttachments];
-    if (messages.count == 0 && messageInputToolbar.textInputView.text.length == 0) {
-        [self sendLocationMessage];
-    } else {
-        for (LYRMessage *message in messages) {
-            [self sendMessage:message];
-        }
-    }
-    if (self.addressBarController) [self.addressBarController disable];
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapGoBackButton:(UIButton *)goBackButton {
+    [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionReverse];
 }
+
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton {
+    if (_isUsingCustomKeyboard) {
+        [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionForward];
+    } else {
+        if (!self.conversation) {
+            return;
+        }
+
+        // If there's no content in the input field, send the location.
+        NSOrderedSet *messages = [self messagesForMediaAttachments:messageInputToolbar.mediaAttachments];
+        if (messages.count == 0 && messageInputToolbar.textInputView.text.length == 0) {
+            [self sendLocationMessage];
+        } else {
+            for (LYRMessage *message in messages) {
+                [self sendMessage:message];
+            }
+        }
+        if (self.addressBarController) [self.addressBarController disable];
+    }
+ }
 
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar
 {
@@ -624,6 +661,25 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     if (!self.conversation) return;
     [self.conversation sendTypingIndicator:LYRTypingDidFinish];
+}
+
+- (void)updateInputToolbarButtonsWithPage:(NSUInteger)page {
+    if (_isUsingCustomKeyboard) {
+        self.messageInputToolbar.goBackButton.hidden = (page == 0 ? YES : NO);
+        NSString *title = (page == 3 ? @"Send" : @"Next");
+        [self.messageInputToolbar.rightAccessoryButton setTitle:title forState:UIControlStateNormal];
+        // self.messageInputToolbar.textInputView.text = @"I need a [specialist] for [date] near [location]. These times should work: [times]";
+    } else {
+        self.messageInputToolbar.goBackButton.hidden = YES;
+        [self.messageInputToolbar.rightAccessoryButton setTitle:@"Send" forState:UIControlStateNormal];
+        // self.messageInputToolbar.textInputView.text = @"";
+    }
+}
+
+#pragma mark - ATLKeyboardFlowViewControllerDelegate
+
+- (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didChangeToPage:(NSUInteger)page {
+    [self updateInputToolbarButtonsWithPage:page];
 }
 
 #pragma mark - Message Sending

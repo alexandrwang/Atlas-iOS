@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SpecialistKeyboardCollectionViewCell : UICollectionViewCell
+@interface ATLTimeKeyboardCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, strong) NSString *labelText;
 
+- (void)select;
 
 @end

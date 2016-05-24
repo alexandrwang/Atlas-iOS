@@ -12,6 +12,7 @@
 #import "ATLPillKeyboardViewController.h"
 #import "ATLTimeKeyboardViewController.h"
 #import "ATLLocationKeyboardViewController.h"
+#import "ATLMessagingUtilities.h"
 
 @interface ATLKeyboardFlowViewController () < ATLKeyboardDelegate >
 

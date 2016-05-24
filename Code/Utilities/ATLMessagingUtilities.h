@@ -50,6 +50,15 @@ extern NSString *const ATLLocationLongitudeKey;
 extern NSString *const ATLUserNotificationInlineReplyActionIdentifier;
 extern NSString *const ATLUserNotificationDefaultActionsCategoryIdentifier;
 
+typedef enum {
+    ATLKeyboardTypeDefault,
+    ATLKeyboardTypeNone,
+    ATLKeyboardTypePill,
+    ATLKeyboardTypeDate,
+    ATLKeyboardTypeLocation,
+    ATLKeyboardTypeTime,
+} ATLKeyboardType;
+
 //-------------------
 // @name Push Support
 //-------------------

@@ -28,6 +28,8 @@ const CGFloat kBarHeight = 36.0f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self startLocationManager];
 
     // Add our UI components.
     _mapView = [[MKMapView alloc] init];
@@ -107,6 +109,7 @@ const CGFloat kBarHeight = 36.0f;
     _locationManager.distanceFilter = kCLDistanceFilterNone;
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [_locationManager startUpdatingLocation];
+    // TODO: test whether it is iOS 8+
     [_locationManager requestWhenInUseAuthorization];
 }
 

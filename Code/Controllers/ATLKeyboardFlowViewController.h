@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATLMessagingUtilities.h"
 
 @protocol ATLKeyboardFlowViewControllerDelegate;
 

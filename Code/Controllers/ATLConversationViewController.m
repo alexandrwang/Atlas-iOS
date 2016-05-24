@@ -706,6 +706,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     } else {
         self.messageInputToolbar.goBackButton.hidden = YES;
         self.messageInputToolbar.rightAccessoryButton.hidden = NO;
+        self.messageInputToolbar.rightAccessoryButton.enabled = YES;
         [self.messageInputToolbar.rightAccessoryButton setTitle:@"Send" forState:UIControlStateNormal];
 
         self.messageInputToolbar.textInputView.text = @"";

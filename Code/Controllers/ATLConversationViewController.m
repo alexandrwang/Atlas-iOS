@@ -650,7 +650,16 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton {
     if (_keyboardMode == ATLKeyboardModeCustom) {
-        [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionForward];
+        if ([_keyboardFlowViewController isSubmittable]) {
+            [_keyboardFlowViewController fillInAllFields];
+            NSOrderedSet *messages = [self messagesForMediaAttachments:messageInputToolbar.mediaAttachments];
+            for (LYRMessage *message in messages) {
+                [self sendMessage:message];
+            }
+            // TODO: send a server call of structured data to backend.
+        } else {
+            [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionForward];
+        }
     } else {
         if (!self.conversation) {
             return;

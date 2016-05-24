@@ -15,6 +15,8 @@
 
 - (void)changePageInDirection:(UIPageViewControllerNavigationDirection)direction;
 - (void)changePageToIndex:(NSInteger)index;
+- (BOOL)isSubmittable;
+- (void)fillInAllFields;
 
 @property (nonatomic, weak) id<ATLKeyboardFlowViewControllerDelegate> flowDelegate;
 @property (nonatomic, assign) NSUInteger keyboardIndex;

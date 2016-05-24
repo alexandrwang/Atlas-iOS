@@ -81,7 +81,7 @@
                     animated:YES
                   completion:^(BOOL finished) {}];
     [self _updateKeyboardType];
-    [self _updateMessages];
+    [self _updateMessages:NO];
     [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
 
     ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
@@ -99,7 +99,7 @@
                         animated:YES
                       completion:^(BOOL finished) {}];
         [self _updateKeyboardType];
-        [self _updateMessages];
+        [self _updateMessages:NO];
         [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
         ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
         [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
@@ -115,11 +115,20 @@
                         animated:YES
                       completion:^(BOOL finished) {}];
         [self _updateKeyboardType];
-        [self _updateMessages];
+        [self _updateMessages:NO];
         [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
         ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
         [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
     }
+}
+
+- (BOOL)isSubmittable {
+    return (_keyboardIndex == (_keyboardArray.count - 1));
+}
+
+- (void)fillInAllFields {
+    [self _updateMessages:YES];
+    [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
 }
 
 - (void)_updateKeyboardType {
@@ -137,7 +146,7 @@
     _keyboardType = type;
 }
 
-- (void)_updateMessages {
+- (void)_updateMessages:(BOOL)forceAllUpdates {
     NSMutableArray *messages = [[NSMutableArray alloc] init];
     NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:@""];
     NSArray *dataArray = (NSArray *)[self sampleJSONData][@"message"];
@@ -150,7 +159,7 @@
 
         NSDictionary *dict2 = dataArray[i+1];
         NSMutableAttributedString *string2;
-        if ((i / 2) == _keyboardIndex) {
+        if ((i / 2) == _keyboardIndex && !forceAllUpdates) {
             string2 = [[NSMutableAttributedString alloc] initWithString:dict2[@"text"]];
             [string2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0f] range: NSMakeRange(0, string2.length)];
             [string2 addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.8f alpha:1.0f] range: NSMakeRange(0, string2.length)];

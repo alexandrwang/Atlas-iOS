@@ -10,7 +10,8 @@
 #import "ATLLocationKeyboardViewController.h"
 #import "ATLMessagingUtilities.h"
 
-@interface ATLLocationKeyboardViewController () < MKMapViewDelegate >
+@interface ATLLocationKeyboardViewController () < MKMapViewDelegate,
+                                                  CLLocationManagerDelegate >
 @end
 
 const CGFloat kPaddingHorizontal = 14.0f;
@@ -22,6 +23,7 @@ const CGFloat kBarHeight = 36.0f;
     UILabel *_addressLabel;
     UIButton *_locationButton;
     CLLocation *_initialLocation;
+    CLLocationManager *_locationManager;
 }
 
 - (void)viewDidLoad {
@@ -45,7 +47,8 @@ const CGFloat kBarHeight = 36.0f;
     [self.view addSubview:_addressBar];
 
     _addressLabel = [[UILabel alloc] init];
-    _addressLabel.text = @"916 Main Street";
+    _addressLabel.text = @"Select Location";
+    _addressLabel.textColor = [UIColor grayColor];
     _addressLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:17.0f];
     [self.view addSubview:_addressLabel];
 
@@ -80,9 +83,32 @@ const CGFloat kBarHeight = 36.0f;
     span.longitudeDelta = 1;
     region.span = span;
     [_mapView setRegion:region animated:YES];
+
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+
+    [geocoder reverseGeocodeLocation:_mapView.userLocation.location
+                   completionHandler:^(NSArray *placemarks, NSError *error) {
+                       if (!error) {
+                           CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                           _addressLabel.text = placemark.name;
+                           _addressLabel.textColor = [UIColor blackColor];
+                           self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressLabel.text ]];
+                           [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];
+                       }
+                   }
+     ];
 }
 
 #pragma mark - MKMapViewDelegate
+
+- (void)startLocationManager {
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.delegate = self;
+    _locationManager.distanceFilter = kCLDistanceFilterNone;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [_locationManager startUpdatingLocation];
+    [_locationManager requestWhenInUseAuthorization];
+}
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     if (!_initialLocation) {

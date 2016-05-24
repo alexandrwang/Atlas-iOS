@@ -1,6 +1,7 @@
 #import "ATLTimeKeyboardViewController.h"
 #import "ATLTimeKeyboardCollectionViewCell.h"
 #import "ATLButton.h"
+#import "ATLMessagingUtilities.h"
 
 @interface ATLTimeKeyboardViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -19,6 +20,8 @@ const CGFloat kVerticalSpacing = 8.0f;
 @implementation ATLTimeKeyboardViewController {
     ATLButton *_importButton;
     ATLButton *_addButton;
+    NSMutableArray *_selectedIndices;
+    UIImageView *_gradientView;
 }
 
 - (id)init {
@@ -31,6 +34,7 @@ const CGFloat kVerticalSpacing = 8.0f;
     self.flowLayout.minimumInteritemSpacing = 1.0f;
     
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:self.flowLayout];
+    _collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[ATLTimeKeyboardCollectionViewCell class] forCellWithReuseIdentifier:@"ATLTimeKeyboardCollectionViewCell"];
     self.sizingCell = [[ATLTimeKeyboardCollectionViewCell alloc] init];
     
@@ -40,6 +44,12 @@ const CGFloat kVerticalSpacing = 8.0f;
 
     [self.view addSubview:self.collectionView];
     self.collectionView.backgroundColor = [UIColor whiteColor];
+
+    NSBundle *resourcesBundle = ATLResourcesBundle();
+    UIImage *image = [UIImage imageNamed:@"gradient" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+    _gradientView = [[UIImageView alloc] initWithImage:image];
+    _gradientView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.view addSubview:_gradientView];
 
     _importButton = [[ATLButton alloc] init];
     [_importButton setTitle:@"Import Calendar" forState:UIControlStateNormal];
@@ -51,6 +61,7 @@ const CGFloat kVerticalSpacing = 8.0f;
     [_addButton setTitleColor:[UIColor colorWithRed:0.33 green:0.73 blue:0.88 alpha:1.0] forState:UIControlStateNormal];
     [self.view addSubview:_addButton];
 
+    _selectedIndices = [[NSMutableArray alloc] init];
     return self;
 }
 
@@ -63,6 +74,7 @@ const CGFloat kVerticalSpacing = 8.0f;
                                   self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
                                   self.view.bounds.size.width - kHorizontalSpacing * 3 - CGRectGetWidth(_importButton.frame),
                                   kBottomBarHeight - kVerticalSpacing * 2);
+    _gradientView.frame = CGRectMake(0, self.view.bounds.size.height - 90, self.view.bounds.size.width, 90);
 }
 
 - (void)loadView {
@@ -77,12 +89,31 @@ const CGFloat kVerticalSpacing = 8.0f;
 }
 
 - (void)configureCell:(ATLTimeKeyboardCollectionViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    cell.labelText = self.dataSourceArray[indexPath.row % self.dataSourceArray.count];
+    cell.stringLabel.text = self.dataSourceArray[indexPath.row % self.dataSourceArray.count];
+    if ([_selectedIndices containsObject:@(indexPath.row)]) {
+        [cell markSelected:YES];
+    } else {
+        [cell markSelected:NO];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     ATLTimeKeyboardCollectionViewCell *cell = (ATLTimeKeyboardCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell select];
+
+    if ([_selectedIndices containsObject:@(indexPath.row)]) {
+        [_selectedIndices removeObject:@(indexPath.row)];
+        [cell markSelected:NO];
+    } else {
+        [_selectedIndices addObject:@(indexPath.row)];
+        [cell markSelected:YES];
+    }
+
+    NSMutableArray *times = [[NSMutableArray alloc] init];
+    for (NSNumber *num in _selectedIndices) {
+        [times addObject:self.dataSourceArray[num.integerValue]];
+    }
+    self.selection = [times copy];
+    [self.delegate keyboard:self withType:ATLKeyboardTypeTime didUpdateSelection:self.selection];
 }
 
 #pragma mark - UICollectionViewDataSource

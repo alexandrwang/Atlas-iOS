@@ -10,8 +10,8 @@
 
 @interface ATLTimeKeyboardCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) NSString *labelText;
+@property (strong, nonatomic) UILabel *stringLabel;
 
-- (void)select;
+- (void)markSelected:(BOOL)selected;
 
 @end

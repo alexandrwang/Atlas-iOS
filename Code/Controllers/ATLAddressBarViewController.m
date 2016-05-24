@@ -71,7 +71,7 @@ static NSString *const ATLAddressBarParticipantAttributeName = @"ATLAddressBarPa
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 56;
-    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.hidden = YES;
     [self.view addSubview:self.tableView];
     

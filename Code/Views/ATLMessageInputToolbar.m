@@ -64,7 +64,8 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 {
     ATLMessageInputToolbar *proxy = [self appearance];
     proxy.rightAccessoryButtonActiveColor = ATLBlueColor();
-    proxy.rightAccessoryButtonDisabledColor = [UIColor grayColor];
+    UIColor *disabledColor = ATLBlueColor();
+    proxy.rightAccessoryButtonDisabledColor = [disabledColor colorWithAlphaComponent:0.5f];
     proxy.rightAccessoryButtonFont = [UIFont fontWithName:@"AvenirNext-Medium" size:16.0f];
 }
 
@@ -82,7 +83,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         [self addSubview:self.buttonBarView];
 
         NSBundle *resourcesBundle = ATLResourcesBundle();
-        self.leftAccessoryImage = [UIImage imageNamed:@"custom_active" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+        self.leftAccessoryImage = [UIImage imageNamed:@"custom_inactive" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         UIImage *keyboardImage = [UIImage imageNamed:@"keyboard_inactive" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         self.rightAccessoryButton.backgroundColor = [UIColor redColor];
         self.displaysRightAccessoryImage = YES;
@@ -123,6 +124,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         self.textInputView.layer.borderColor = ATLGrayColor().CGColor;
         self.textInputView.layer.borderWidth = 0;
         self.textInputView.layer.cornerRadius = 5.0f;
+        self.textInputView.autocorrectionType = UITextAutocorrectionTypeNo;
         [self addSubview:self.textInputView];
         
         self.verticalMargin = ATLVerticalMargin;
@@ -138,7 +140,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
         self.hairlineView = [[UIView alloc] init];
         [self.hairlineView setUserInteractionEnabled:NO];
-        [self.hairlineView setBackgroundColor:[UIColor colorWithWhite:0.8f alpha:1.0f]];
+        [self.hairlineView setBackgroundColor:[UIColor colorWithWhite:0.93f alpha:1.0f]];
         [self addSubview:self.hairlineView];
     }
     return self;
@@ -167,6 +169,8 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
     keyboardButtonFrame.size.width = (self.keyboardButton ? ATLLeftAccessoryButtonWidth : 0);
     leftButtonFrame.size.width = (self.keyboardButton ? ATLLeftAccessoryButtonWidth : 0);
     goBackButtonFrame.size = [_goBackButton sizeThatFits:CGSizeZero];
+    rightButtonFrame.size = [_rightAccessoryButton sizeThatFits:CGSizeZero];
+    rightButtonFrame.size.width = 50.0f;
 
     // This makes the input accessory view work with UISplitViewController to manage the frame width.
     if (self.containerViewController) {
@@ -182,12 +186,6 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
     goBackButtonFrame.size.height = ATLButtonHeight;
     goBackButtonFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLButtonSpacing;
 
-    if (self.rightAccessoryButtonFont && (self.textInputView.text.length || !self.displaysRightAccessoryImage)) {
-        rightButtonFrame.size.width = CGRectIntegral([ATLLocalizedString(@"atl.messagetoolbar.send.key", self.rightAccessoryButtonTitle, nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:0 attributes:@{NSFontAttributeName: self.rightAccessoryButtonFont} context:nil]).size.width + ATLRightAccessoryButtonPadding;
-    } else {
-        rightButtonFrame.size.width = ATLRightAccessoryButtonDefaultWidth;
-    }
-    
     rightButtonFrame.size.height = ATLButtonHeight;
     rightButtonFrame.origin.x = CGRectGetWidth(frame) - CGRectGetWidth(rightButtonFrame) - ATLRightButtonHorizontalMargin;
 
@@ -242,6 +240,13 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 }
 
 #pragma mark - Public Methods
+
+- (void)switchToNoKeyboard {
+    NSBundle *resourcesBundle = ATLResourcesBundle();
+    self.leftAccessoryImage = [UIImage imageNamed:@"custom_inactive" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+    UIImage *keyboardImage = [UIImage imageNamed:@"keyboard_inactive" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+    [self.keyboardButton setImage:keyboardImage forState:UIControlStateNormal];
+}
 
 - (void)switchToCustomKeyboard {
     NSBundle *resourcesBundle = ATLResourcesBundle();
@@ -358,7 +363,9 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         [self.inputToolBarDelegate messageInputToolbarDidEndTyping:self];
     }
     [self.inputToolBarDelegate messageInputToolbar:self didTapRightAccessoryButton:self.rightAccessoryButton];
-    self.textInputView.text = @"";
+    if (self.textInputView.isEditable) {
+        self.textInputView.text = @"";
+    }
     [self setNeedsLayout];
     self.mediaAttachments = nil;
     self.attributedStringForMessageParts = nil;
@@ -366,6 +373,10 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 }
 
 #pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self.inputToolBarDelegate messageInputToolbar:self didTapInputView:self.textInputView];
+}
 
 - (void)textViewDidChange:(UITextView *)textView
 {
@@ -449,7 +460,6 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 - (void)configureRightAccessoryButtonState
 {
     [self configureRightAccessoryButtonForText];
-    self.rightAccessoryButton.enabled = YES;
 }
 
 - (void)configureRightAccessoryButtonForText
@@ -460,16 +470,10 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
     self.rightAccessoryButton.titleLabel.font = self.rightAccessoryButtonFont;
     [self.rightAccessoryButton setTitleColor:self.rightAccessoryButtonActiveColor forState:UIControlStateNormal];
     [self.rightAccessoryButton setTitleColor:self.rightAccessoryButtonDisabledColor forState:UIControlStateDisabled];
-    if (!self.displaysRightAccessoryImage && !self.textInputView.text.length) {
-        self.rightAccessoryButton.enabled = NO;
-    } else {
-        self.rightAccessoryButton.enabled = YES;
-    }
 }
 
 - (void)configureRightAccessoryButtonForImage
 {
-    self.rightAccessoryButton.enabled = YES;
     self.rightAccessoryButton.accessibilityLabel = ATLMessageInputToolbarLocationButton;
     self.rightAccessoryButton.contentEdgeInsets = UIEdgeInsetsZero;
     [self.rightAccessoryButton setTitle:nil forState:UIControlStateNormal];

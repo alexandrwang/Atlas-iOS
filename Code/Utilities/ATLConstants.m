@@ -15,7 +15,7 @@ NSString *const ATLConversationName = @"ATLConversationName";
 
 UIColor *ATLBlueColor()
 {
-    return [UIColor colorWithRed:33.0f/255.0f green:170.0f/255.0f blue:225.0f/255.0f alpha:1.0];
+    return [UIColor colorWithRed:0.33 green:0.73 blue:0.88 alpha:1.0];
 }
 
 UIColor *ATLDarkGrayColor()

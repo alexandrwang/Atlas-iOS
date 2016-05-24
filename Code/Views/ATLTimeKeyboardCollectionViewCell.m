@@ -11,8 +11,6 @@
 
 @interface ATLTimeKeyboardCollectionViewCell ()
 
-@property (strong, nonatomic) UILabel *stringLabel;
-
 @end
 
 @implementation ATLTimeKeyboardCollectionViewCell {
@@ -41,8 +39,9 @@
     self.stringLabel.text = labelText;
 }
 
-- (void)select {
-    _isSelected = !_isSelected;
+- (void)markSelected:(BOOL)selected {
+    _isSelected = selected;
+    
     if (_isSelected) {
         self.backgroundColor = ATLBlueColor();
         _stringLabel.textColor = [UIColor whiteColor];

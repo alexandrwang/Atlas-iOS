@@ -43,7 +43,8 @@
 @interface ATLConversationViewController () < UICollectionViewDataSource,
                                               UICollectionViewDelegate,
                                               CLLocationManagerDelegate,
-                                              ATLKeyboardFlowViewControllerDelegate >
+                                              ATLKeyboardFlowViewControllerDelegate,
+                                              UITextViewDelegate >
 
 @property (nonatomic) ATLConversationDataSource *conversationDataSource;
 @property (nonatomic, readwrite) LYRQueryController *queryController;
@@ -67,10 +68,16 @@
 
 @end
 
+typedef NS_ENUM(NSInteger, ATLKeyboardMode) {
+    ATLKeyboardModeDefault,
+    ATLKeyboardModeSystem,
+    ATLKeyboardModeCustom,
+};
+
 @implementation ATLConversationViewController {
     ATLMessageInputToolbar *_messageInputToolbar;
     ATLKeyboardFlowViewController *_keyboardFlowViewController;
-    BOOL _isUsingCustomKeyboard;
+    ATLKeyboardMode _keyboardMode;
 }
 
 static NSInteger const ATLMoreMessagesSection = 0;
@@ -135,7 +142,8 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     _sectionFooters = [NSHashTable weakObjectsHashTable];
     _objectChanges = [NSMutableArray new];
     _animationQueue = dispatch_queue_create("com.atlas.animationQueue", DISPATCH_QUEUE_SERIAL);
-    _isUsingCustomKeyboard = NO;
+    _keyboardMode = ATLKeyboardModeDefault;
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide) name:UIKeyboardDidHideNotification object:nil];
 }
 
 - (void)loadView
@@ -582,20 +590,24 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         self.keyboardInputView = messageInputToolbar.textInputView;
     }
     _messageInputToolbar = messageInputToolbar;
+    _messageInputToolbar.textInputView.userInteractionEnabled = YES;
+    _messageInputToolbar.textInputView.dataDetectorTypes =UIDataDetectorTypeLink;
+    _messageInputToolbar.textInputView.delegate = self;
+    _messageInputToolbar.textInputView.tintColor = ATLBlueColor();
 }
 
 #pragma mark - ATLMessageInputToolbarDelegate
 
-// Switch to default keyboard.
+// Switch to system keyboard.
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapKeyboardButton:(UIButton *)keyboardButton
 {
-    _isUsingCustomKeyboard = NO;
+    _keyboardMode = ATLKeyboardModeSystem;
     [self.messageInputToolbar endEditing:YES];
     self.messageInputToolbar.textInputView.inputView = nil;
     [self.messageInputToolbar.textInputView reloadInputViews];
     [self.messageInputToolbar.textInputView becomeFirstResponder];
     [messageInputToolbar switchToDefaultKeyboard];
-    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex];
+    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:ATLKeyboardTypeDefault];
 }
 
 // Switch to custom keyboard.
@@ -608,14 +620,20 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
 
     if (!self.messageInputToolbar.textInputView.inputView) {
-        _isUsingCustomKeyboard = YES;
+        _keyboardMode = ATLKeyboardModeCustom;
         [self.messageInputToolbar endEditing:YES];
         self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
         [self.messageInputToolbar.textInputView reloadInputViews];
         [self.messageInputToolbar.textInputView becomeFirstResponder];
         [messageInputToolbar switchToCustomKeyboard];
-        [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex];
+        [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
     }
+}
+
+- (void)onKeyboardHide {
+    self.messageInputToolbar.textInputView.inputView = nil;
+    [self.messageInputToolbar switchToNoKeyboard];
+    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:ATLKeyboardTypeNone];
 }
 
 - (UIView *)createButtonView {
@@ -631,7 +649,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 }
 
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton {
-    if (_isUsingCustomKeyboard) {
+    if (_keyboardMode == ATLKeyboardModeCustom) {
         [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionForward];
     } else {
         if (!self.conversation) {
@@ -651,35 +669,67 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
  }
 
-- (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar
-{
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapInputView:(UITextView *)inputView {
+    if (_keyboardMode == ATLKeyboardModeDefault) {
+        [self messageInputToolbar:messageInputToolbar didTapLeftAccessoryButton:nil];
+    }
+}
+
+- (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar {
     if (!self.conversation) return;
     [self.conversation sendTypingIndicator:LYRTypingDidBegin];
 }
 
-- (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar
-{
+- (void)messageInputToolbarDidEndTyping:(ATLMessageInputToolbar *)messageInputToolbar {
     if (!self.conversation) return;
     [self.conversation sendTypingIndicator:LYRTypingDidFinish];
 }
 
-- (void)updateInputToolbarButtonsWithPage:(NSUInteger)page {
-    if (_isUsingCustomKeyboard) {
+- (void)updateInputToolbarButtonsWithPage:(NSUInteger)page type:(ATLKeyboardType)type {
+    if (type == ATLKeyboardTypeNone) {
+        self.messageInputToolbar.goBackButton.hidden = YES;
+        self.messageInputToolbar.rightAccessoryButton.hidden = YES;
+
+    } else if (_keyboardMode == ATLKeyboardModeCustom) {
         self.messageInputToolbar.goBackButton.hidden = (page == 0 ? YES : NO);
         NSString *title = (page == 3 ? @"Send" : @"Next");
-        [self.messageInputToolbar.rightAccessoryButton setTitle:title forState:UIControlStateNormal];
-        // self.messageInputToolbar.textInputView.text = @"I need a [specialist] for [date] near [location]. These times should work: [times]";
+        if (type == ATLKeyboardTypePill) {
+            self.messageInputToolbar.rightAccessoryButton.hidden = YES;
+        } else {
+            [self.messageInputToolbar.rightAccessoryButton setTitle:title forState:UIControlStateNormal];
+            self.messageInputToolbar.rightAccessoryButton.hidden = NO;
+            self.messageInputToolbar.rightAccessoryButton.enabled = NO;
+        }
+
+        self.messageInputToolbar.textInputView.editable = NO;
+        [self.messageInputToolbar.textInputView setAttributedText:_keyboardFlowViewController.message];
     } else {
         self.messageInputToolbar.goBackButton.hidden = YES;
+        self.messageInputToolbar.rightAccessoryButton.hidden = NO;
         [self.messageInputToolbar.rightAccessoryButton setTitle:@"Send" forState:UIControlStateNormal];
-        // self.messageInputToolbar.textInputView.text = @"";
+
+        self.messageInputToolbar.textInputView.text = @"";
+        self.messageInputToolbar.textInputView.editable = YES;
     }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    NSNumber *myNumber = [formatter numberFromString:[URL absoluteString]];
+    [_keyboardFlowViewController changePageToIndex:myNumber.integerValue];
+    return NO;
 }
 
 #pragma mark - ATLKeyboardFlowViewControllerDelegate
 
-- (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didChangeToPage:(NSUInteger)page {
-    [self updateInputToolbarButtonsWithPage:page];
+- (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didChangeToPage:(NSUInteger)page withType:(ATLKeyboardType)type {
+    [self updateInputToolbarButtonsWithPage:page type:type];
+}
+
+- (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didUpdateSelection:(NSMutableArray *)selection {
+    if (_keyboardMode == ATLKeyboardModeCustom) {
+        self.messageInputToolbar.rightAccessoryButton.enabled = (selection.count > 0);
+    }
 }
 
 #pragma mark - Message Sending

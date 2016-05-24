@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATLKeyboardViewController.h"
 
-@interface ATLDateKeyboardViewController : UIViewController
+@interface ATLDateKeyboardViewController : ATLKeyboardViewController
 
 @end

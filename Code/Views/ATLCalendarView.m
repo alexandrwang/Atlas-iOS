@@ -13,8 +13,7 @@
 @property (nonatomic, assign) NSInteger shakeDirection;
 @property (nonatomic, strong) UISwipeGestureRecognizer *swipeleft;
 @property (nonatomic, strong) UISwipeGestureRecognizer *swipeRight;
-@property (nonatomic, copy) NSMutableArray *selectedDates;
-
+@property (nonatomic) NSMutableArray *selectedDates;
 @end
 
 const CGFloat kMonthLabelHeight = 32.0f;
@@ -24,6 +23,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
     int _numberOfRows;
     CGFloat _scrollPosition;
     UIView *_hairlineView;
+    UIImageView *_gradientView;
 }
 
 #pragma mark - Init methods
@@ -44,7 +44,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
         _dayBgColorWithoutData      = [UIColor colorWithRed:0.984 green:0.984 blue:0.984 alpha:1];
         _dayBgColorWithData         = [UIColor colorWithRed:0.984 green:0.984 blue:0.984 alpha:1];
         _dayBgColorSelected         = ATLBlueColor();
-        _dayTxtColorWithoutData     = [UIColor colorWithRed:0.475 green:0.475 blue:0.475 alpha:1];;
+        _dayTxtColorWithoutData     = [UIColor colorWithRed:0.475 green:0.475 blue:0.475 alpha:1];
         _dayTxtColorWithData        = [UIColor colorWithRed:0.475 green:0.475 blue:0.475 alpha:1];
         _dayTxtColorSelected        = [UIColor whiteColor];
         _borderColor                = [UIColor whiteColor];
@@ -72,7 +72,8 @@ const CGFloat kMonthLabelHeight = 32.0f;
 
         _selectedDate = [_gregorian dateFromComponents:components];
         _selectedDates = [[NSMutableArray alloc] init];
-        [_selectedDates addObject:_selectedDate];
+        //[_selectedDates addObject:_selectedDate];
+        //[self.delegate updatedSelection:_selectedDates];
 
         NSArray * shortWeekdaySymbols = [[[NSDateFormatter alloc] init] shortWeekdaySymbols];
         NSMutableArray *weekdaySymbols = [[NSMutableArray alloc] init];
@@ -86,7 +87,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
         self.backgroundColor = [UIColor whiteColor];
 
         _hairlineView = [[UIView alloc] init];
-        _hairlineView.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
+        _hairlineView.backgroundColor = [UIColor colorWithWhite:0.93f alpha:1.0f];
         [self addSubview:_hairlineView];
     }
     return self;
@@ -220,7 +221,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
     NSDateComponents * components = [_gregorian components:_dayInfoUnits fromDate:_selectedDate];
 
     NSDate *clickedDate = [_gregorian dateFromComponents:components];
-    [_delegate dayChangedToDate:clickedDate];
+    //[_delegate dayChangedToDate:clickedDate];
 
     [UIView transitionWithView:self
                       duration:0.5f
@@ -272,11 +273,11 @@ const CGFloat kMonthLabelHeight = 32.0f;
     NSDateComponents *components = [_gregorian components:_dayInfoUnits fromDate:date];
     [button setTitle:[NSString stringWithFormat:@"%ld",(long)components.day] forState:UIControlStateNormal];
     button.tag = [self buttonTagForDate:date];
+    button.layer.borderWidth = _borderWidth;
 
     BOOL isSelected = NO;
     for (NSDate *current in _selectedDates) {
         if ([current compare:date] == NSOrderedSame) {
-            button.layer.borderWidth = 0;
             [button setTitleColor:_dayTxtColorSelected forState:UIControlStateNormal];
             [button setBackgroundColor:_dayBgColorSelected];
             isSelected = YES;
@@ -286,7 +287,6 @@ const CGFloat kMonthLabelHeight = 32.0f;
 
     if (!isSelected) {
         // Unselected button
-        button.layer.borderWidth = _borderWidth/2.f;
         [button setTitleColor:_dayTxtColorWithoutData forState:UIControlStateNormal];
         [button setBackgroundColor:_dayBgColorWithoutData];
 
@@ -366,13 +366,14 @@ const CGFloat kMonthLabelHeight = 32.0f;
     } else {
         [_selectedDates addObject:_selectedDate];
     }
+    [self.delegate updatedSelection:_selectedDates];
     [self setNeedsDisplay];
 
     // Configure  the new selected day button
     [self configureDayButton:sender withDate:_selectedDate];
 
     // Finally, notify the delegate
-    [_delegate dayChangedToDate:_selectedDate];
+    //[_delegate dayChangedToDate:_selectedDate];
 
 }
 
@@ -383,6 +384,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
     _dateScrollView.contentOffset = CGPointMake(0, _scrollPosition);
 
     _hairlineView.frame = CGRectMake(0, 0, self.bounds.size.width, 1.0f / [[UIScreen mainScreen] nativeScale]);
+    _gradientView.frame = CGRectMake(0, self.bounds.size.height - 90, self.bounds.size.width, 90);
 }
 
 #pragma mark - Drawing methods
@@ -429,10 +431,10 @@ const CGFloat kMonthLabelHeight = 32.0f;
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     CGContextSetFillColorWithColor(context, _borderColor.CGColor);
-    CGContextAddRect(context, CGRectMake(_originX - _borderWidth/2.f, minY - _borderWidth/2.f, 7*_dayWidth + _borderWidth, _borderWidth));
-    CGContextAddRect(context, CGRectMake(_originX - _borderWidth/2.f, maxY - _borderWidth/2.f, 7*_dayWidth + _borderWidth, _borderWidth));
-    CGContextAddRect(context, CGRectMake(_originX - _borderWidth/2.f, minY - _borderWidth/2.f, _borderWidth, maxY - minY));
-    CGContextAddRect(context, CGRectMake(_originX + 7*_dayWidth - _borderWidth/2.f, minY - _borderWidth/2.f, _borderWidth, maxY - minY));
+    CGContextAddRect(context, CGRectMake(_originX - (_borderWidth / 2.0f), minY - _borderWidth/2.f, 7*_dayWidth + _borderWidth, _borderWidth));
+    CGContextAddRect(context, CGRectMake(_originX - (_borderWidth / 2.0f), maxY - _borderWidth/2.f, 7*_dayWidth + _borderWidth, _borderWidth));
+    CGContextAddRect(context, CGRectMake(_originX - (_borderWidth / 2.0f), minY - _borderWidth/2.f, _borderWidth, maxY - minY));
+    CGContextAddRect(context, CGRectMake(_originX + 7*_dayWidth - (_borderWidth / 2.0f), minY - _borderWidth/2.f, _borderWidth, maxY - minY));
     CGContextFillPath(context);
     CGColorSpaceRelease(baseSpace), baseSpace = NULL;
 
@@ -497,30 +499,44 @@ const CGFloat kMonthLabelHeight = 32.0f;
         }
     }
 
+    NSBundle *resourcesBundle = ATLResourcesBundle();
+    UIImage *image = [UIImage imageNamed:@"gradient" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+    _gradientView = [[UIImageView alloc] initWithImage:image];
+    _gradientView.contentMode = UIViewContentModeScaleAspectFill;
+    [self addSubview:_gradientView];
+
     // Month label
     NSDateFormatter *format1 = [[NSDateFormatter alloc] init];
     [format1 setDateFormat:@"MMMM"];
     NSString *dateString1 = [[format1 stringFromDate:_calendarDate] uppercaseString];
     NSMutableAttributedString *attrString1 = [[NSMutableAttributedString alloc] initWithString:dateString1 attributes:@{NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Bold" size:16.0f]}];
+
     NSDateFormatter *format2 = [[NSDateFormatter alloc] init];
     [format2 setDateFormat:@" yyyy"];
     NSString *dateString2 = [[format2 stringFromDate:_calendarDate] uppercaseString];
     NSMutableAttributedString *attrString2 = [[NSMutableAttributedString alloc] initWithString:dateString2 attributes:@{NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-UltraLight" size:16.0f]}];
-    [[attrString1 mutableString] appendString:[attrString2 mutableString]];
 
-    UILabel *titleText = [[UILabel alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - kMonthLabelHeight, self.bounds.size.width, kMonthLabelHeight)];
-    titleText.textAlignment = NSTextAlignmentCenter;
-    titleText.attributedText = attrString1;
-    titleText.textColor = [UIColor colorWithRed:0.506 green:0.506 blue:0.506 alpha:1];
-    [self addSubview:titleText];
+    UILabel *titleText1=[[UILabel alloc] init];
+    titleText1.textAlignment = NSTextAlignmentCenter;
+    titleText1.attributedText = attrString1;
+    titleText1.textColor = [UIColor colorWithRed:0.506 green:0.506 blue:0.506 alpha:1];
+    [titleText1 sizeToFit];
+    [self addSubview:titleText1];
 
-    //if (_delegate != nil && [_delegate respondsToSelector:@selector(setMonthLabel:)])
-    //    [_delegate setMonthLabel:[NSString stringWithFormat:@"%@%@", dateString1, dateString2]];
+    UILabel *titleText2=[[UILabel alloc] init];
+    titleText2.textAlignment = NSTextAlignmentCenter;
+    titleText2.attributedText = attrString2;
+    titleText2.textColor = [UIColor colorWithRed:0.506 green:0.506 blue:0.506 alpha:1];
+    [titleText2 sizeToFit];
+    [self addSubview:titleText2];
+
+    CGFloat combinedWidth = titleText1.frame.size.width + titleText2.frame.size.width;
+    titleText1.frame = CGRectMake((self.bounds.size.width - combinedWidth) / 2, self.bounds.size.height - kMonthLabelHeight, titleText1.frame.size.width, kMonthLabelHeight);
+    titleText2.frame = CGRectMake(CGRectGetMaxX(titleText1.frame), self.bounds.size.height - kMonthLabelHeight, titleText2.frame.size.width, kMonthLabelHeight);
 
     // Previous and next button
     CGFloat buttonOffset = 42.0f;
 
-    NSBundle *resourcesBundle = ATLResourcesBundle();
     UIButton * buttonPrev          = [[UIButton alloc] initWithFrame:CGRectMake(buttonOffset, self.bounds.size.height - kMonthLabelHeight, kMonthLabelHeight, kMonthLabelHeight)];
     [buttonPrev setImage:[UIImage imageNamed:@"arrow" inBundle:resourcesBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [buttonPrev setTitleColor:_monthAndDayTextColor forState:UIControlStateNormal];

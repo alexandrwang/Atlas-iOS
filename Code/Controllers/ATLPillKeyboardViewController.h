@@ -1,19 +1,15 @@
 //
-//  SpecialistButtonsViewController.h
+//  ATLPillKeyboardViewController.h
 //  Pods
 //
-//  Created by Lucy Guo on 4/23/16.
+//  Created by Jesse Chand on 5/21/16.
 //
 //
 
 #import <UIKit/UIKit.h>
 #import "ATLPillKeyboardCollectionViewCell.h"
+#import "ATLKeyboardViewController.h"
 
-@import UIKit;
-
-
-@interface ATLPillKeyboardViewController : UIViewController
-
-
+@interface ATLPillKeyboardViewController : ATLKeyboardViewController
 
 @end

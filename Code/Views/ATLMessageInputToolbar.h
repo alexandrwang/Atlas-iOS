@@ -39,6 +39,12 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 @protocol ATLMessageInputToolbarDelegate <NSObject>
 
 /**
+ @abstract Notifies the receiver that the input view was tapped.
+ */
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapInputView:(UITextView *)inputView;
+
+
+/**
  @abstract Notifies the receiver that the right accessory button was tapped.
  */
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapRightAccessoryButton:(UIButton *)rightAccessoryButton;
@@ -199,6 +205,7 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
 
 //! Handle keyboard switching / updating:
 
+- (void)switchToNoKeyboard;
 - (void)switchToCustomKeyboard;
 - (void)switchToDefaultKeyboard;
 

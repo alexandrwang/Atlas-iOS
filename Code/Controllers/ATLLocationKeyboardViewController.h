@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ATLKeyboardViewController.h"
 
-@interface ATLLocationKeyboardViewController : UIViewController
+@interface ATLLocationKeyboardViewController : ATLKeyboardViewController
 
 @end

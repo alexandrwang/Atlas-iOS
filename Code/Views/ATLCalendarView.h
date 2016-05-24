@@ -64,9 +64,10 @@
 
 @protocol CalendarDelegate <NSObject>
 
--(void)dayChangedToDate:(NSDate *)selectedDate;
+- (void)updatedSelection:(NSMutableArray *)selection;
 
 @optional
+-(void)dayChangedToDate:(NSDate *)selectedDate;
 -(void)setHeightNeeded:(NSInteger)heightNeeded;
 -(void)setMonthLabel:(NSString *)monthLabel;
 -(void)setEnabledForPrevMonthButton:(BOOL)enablePrev nextMonthButton:(BOOL)enableNext;

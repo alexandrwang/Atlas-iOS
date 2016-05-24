@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "ATLTimeKeyboardCollectionViewCell.h"
+#import "ATLKeyboardViewController.h"
 
 @import UIKit;
 
-
-@interface ATLTimeKeyboardViewController : UIViewController
-
-
+@interface ATLTimeKeyboardViewController : ATLKeyboardViewController
 
 @end

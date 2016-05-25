@@ -656,6 +656,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             for (LYRMessage *message in messages) {
                 [self sendMessage:message];
             }
+            [_keyboardFlowViewController resetMessageField];
             // TODO: send a server call of structured data to backend.
         } else {
             [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionForward];

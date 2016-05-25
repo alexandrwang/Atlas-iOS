@@ -17,6 +17,7 @@
 - (void)changePageToIndex:(NSInteger)index;
 - (BOOL)isSubmittable;
 - (void)fillInAllFields;
+- (void)resetMessageField;
 
 @property (nonatomic, weak) id<ATLKeyboardFlowViewControllerDelegate> flowDelegate;
 @property (nonatomic, assign) NSUInteger keyboardIndex;

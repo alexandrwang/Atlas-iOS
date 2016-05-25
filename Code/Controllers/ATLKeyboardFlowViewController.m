@@ -131,6 +131,27 @@
     [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
 }
 
+- (void)resetMessageField {
+    [self _parseJSONData:[self sampleJSONData]];
+    _selections = [[NSMutableArray alloc] init];
+    _keyboardIndex = 0;
+    
+    for (ATLKeyboardViewController *keyboardViewController in _keyboardArray) {
+        keyboardViewController.delegate = self;
+    }
+    
+    [self setViewControllers:@[_keyboardArray[_keyboardIndex]]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:YES
+                  completion:^(BOOL finished) {}];
+    [self _updateKeyboardType];
+    [self _updateMessages:NO];
+    [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
+    
+    ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
+    [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
+}
+
 - (void)_updateKeyboardType {
     UIViewController *keyboard = _keyboardArray[_keyboardIndex];
     ATLKeyboardType type = ATLKeyboardTypeDefault;

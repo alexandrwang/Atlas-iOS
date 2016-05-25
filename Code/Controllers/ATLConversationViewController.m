@@ -743,6 +743,11 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
 }
 
+- (void)presentLocationViewController:(UINavigationController *)controller {
+    
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
 #pragma mark - Message Sending
 
 - (NSOrderedSet *)defaultMessagesForMediaAttachments:(NSArray *)mediaAttachments

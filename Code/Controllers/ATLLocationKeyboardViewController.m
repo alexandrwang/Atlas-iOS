@@ -9,9 +9,11 @@
 #import <MapKit/MapKit.h>
 #import "ATLLocationKeyboardViewController.h"
 #import "ATLMessagingUtilities.h"
+#import "CMAddressTableViewController.h"
+#import "CMAddressSearchViewController.h"
 
 @interface ATLLocationKeyboardViewController () < MKMapViewDelegate,
-                                                  CLLocationManagerDelegate >
+                                                  CLLocationManagerDelegate, CMAddressSearchDelegate >
 @end
 
 const CGFloat kPaddingHorizontal = 14.0f;
@@ -20,7 +22,7 @@ const CGFloat kBarHeight = 36.0f;
 @implementation ATLLocationKeyboardViewController {
     MKMapView *_mapView;
     UIView *_addressBar;
-    UILabel *_addressLabel;
+//    UILabel *_addressLabel;
     UIButton *_locationButton;
     CLLocation *_initialLocation;
     CLLocationManager *_locationManager;
@@ -46,6 +48,12 @@ const CGFloat kBarHeight = 36.0f;
     _addressBar.layer.shadowColor = [UIColor blackColor].CGColor;
     _addressBar.layer.shadowRadius = 2.0f;
     _addressBar.clipsToBounds = YES;
+    
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(addressTapped:)];
+    [_addressBar addGestureRecognizer:singleFingerTap];
+    
     [self.view addSubview:_addressBar];
 
     _addressLabel = [[UILabel alloc] init];
@@ -61,6 +69,30 @@ const CGFloat kBarHeight = 36.0f;
     [self.view addSubview:_locationButton];
 }
 
+//The event handling method
+- (void)addressTapped:(UITapGestureRecognizer *)recognizer {
+    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    
+    CMAddressSearchViewController *atvc = [[CMAddressSearchViewController alloc] init];
+    
+    
+    atvc.delegate = self;
+    
+    
+    UINavigationController *navigationController =
+    [[UINavigationController alloc] initWithRootViewController:atvc];
+    
+    
+    [self.delegate presentLocationViewController:navigationController];
+}
+
+- (void)setSelectedAddress:(NSString*)address {
+    
+    _addressLabel.text = address;
+    
+}
+
+
 - (void)viewDidLayoutSubviews {
     // Layout our UI.
     _mapView.frame = self.view.bounds;
@@ -70,7 +102,7 @@ const CGFloat kBarHeight = 36.0f;
                                    kBarHeight);
     _addressLabel.frame = CGRectMake(kPaddingHorizontal * 2,
                                      self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,
-                                     self.view.bounds.size.width - kPaddingHorizontal * 3 - kBarHeight,
+                                     self.view.bounds.size.width - kPaddingHorizontal * 3 - kBarHeight - 15,
                                      kBarHeight);
     _locationButton.frame = CGRectMake(self.view.bounds.size.width - kPaddingHorizontal - kBarHeight,
                                        self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,

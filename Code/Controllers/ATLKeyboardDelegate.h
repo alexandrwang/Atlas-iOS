@@ -17,6 +17,8 @@
 
 @protocol ATLKeyboardDelegate
 
+- (void)presentLocationViewController:(UINavigationController *)controller;
+
 - (void)keyboard:(ATLKeyboardViewController *)keyboard didSelectCell:(UICollectionViewCell *)cell;
 - (void)keyboard:(ATLKeyboardViewController *)keyboard withType:(ATLKeyboardType)type didUpdateSelection:(NSMutableArray *)selection;
 

@@ -13,8 +13,9 @@
 #import "ATLTimeKeyboardViewController.h"
 #import "ATLLocationKeyboardViewController.h"
 #import "ATLMessagingUtilities.h"
+#import "CMAddressSearchViewController.h"
 
-@interface ATLKeyboardFlowViewController () < ATLKeyboardDelegate >
+@interface ATLKeyboardFlowViewController () < ATLKeyboardDelegate, CMAddressSearchDelegate>
 
 @end
 
@@ -135,11 +136,11 @@
     [self _parseJSONData:[self sampleJSONData]];
     _selections = [[NSMutableArray alloc] init];
     _keyboardIndex = 0;
-    
+
     for (ATLKeyboardViewController *keyboardViewController in _keyboardArray) {
         keyboardViewController.delegate = self;
     }
-    
+
     [self setViewControllers:@[_keyboardArray[_keyboardIndex]]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:YES
@@ -147,7 +148,7 @@
     [self _updateKeyboardType];
     [self _updateMessages:NO];
     [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
-    
+
     ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
     [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
 }
@@ -207,6 +208,11 @@
     }
     [self changePageInDirection:UIPageViewControllerNavigationDirectionForward];
 }
+
+- (void)presentLocationViewController:(UINavigationController *)controller {
+    [self.flowDelegate presentLocationViewController:controller];
+}
+
 
 - (void)keyboard:(ATLKeyboardViewController *)keyboard withType:(ATLKeyboardType)type didUpdateSelection:(NSMutableArray *)selection {
     if (_keyboardType == type) {

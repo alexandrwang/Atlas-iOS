@@ -34,7 +34,7 @@ const CGFloat kVerticalSpacing = 8.0f;
     self.flowLayout.minimumInteritemSpacing = 1.0f;
     
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:self.flowLayout];
-    _collectionView.backgroundColor = [UIColor whiteColor];
+    _collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView registerClass:[ATLTimeKeyboardCollectionViewCell class] forCellWithReuseIdentifier:@"ATLTimeKeyboardCollectionViewCell"];
     self.sizingCell = [[ATLTimeKeyboardCollectionViewCell alloc] init];
     
@@ -66,7 +66,7 @@ const CGFloat kVerticalSpacing = 8.0f;
 }
 
 - (void)viewDidLayoutSubviews {
-    _collectionView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - kBottomBarHeight);
+    _collectionView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - kBottomBarHeight + 10);
     _importButton.frame = CGRectMake(kHorizontalSpacing,
                                      self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
                                      150, kBottomBarHeight - kVerticalSpacing * 2);

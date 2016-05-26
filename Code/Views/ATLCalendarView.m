@@ -84,7 +84,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
         _weekDayNames  = @[weekdaySymbols[1], weekdaySymbols[2], weekdaySymbols[3], weekdaySymbols[4],
                            weekdaySymbols[5], weekdaySymbols[6], weekdaySymbols[0]];
 
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
 
         _hairlineView = [[UIView alloc] init];
         _hairlineView.backgroundColor = [UIColor colorWithWhite:0.93f alpha:1.0f];
@@ -379,7 +379,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
 
 - (void)layoutSubviews {
     CGFloat dayHeight = (self.bounds.size.height - kMonthLabelHeight) / 5.0f;
-    _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4);
+    _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4 + 30);
     _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * _numberOfRows);
     _dateScrollView.contentOffset = CGPointMake(0, _scrollPosition);
 

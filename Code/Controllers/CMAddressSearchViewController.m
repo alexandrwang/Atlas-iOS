@@ -33,6 +33,8 @@
     self.searchController.searchResultsDelegate = self;
     self.searchController.searchResultsDataSource = self;
     
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    
     searchQuery = [[SPGooglePlacesAutocompleteQuery alloc] init];
     searchQuery.radius = 100.0;
     shouldBeginEditing = YES;

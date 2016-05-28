@@ -625,15 +625,17 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     
     if (!self.messageInputToolbar.textInputView.inputView) {
         _keyboardMode = ATLKeyboardModeCustom;
-        //        [self.messageInputToolbar endEditing:YES];
-        [self.messageInputToolbar.textInputView resignFirstResponder];
-        self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
-        [self.messageInputToolbar.textInputView becomeFirstResponder];
-        [self.messageInputToolbar.textInputView reloadInputViews];
-        [messageInputToolbar switchToCustomKeyboard];
-        [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
-        [self.messageInputToolbar.textInputView becomeFirstResponder];
+        [self resetCustomKeyboard];
+        [self resetCustomKeyboard];
     }
+}
+
+- (void)resetCustomKeyboard {
+    self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
+    [self.messageInputToolbar.textInputView becomeFirstResponder];
+    [self.messageInputToolbar.textInputView reloadInputViews];
+    [_messageInputToolbar switchToCustomKeyboard];
+    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
 }
 
 - (void)onKeyboardHide {
@@ -1509,7 +1511,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (BOOL)textViewDidBeginEditing:(UITextView *)textView
 {
-    if (!_firstLoad) {
+    if (!_firstLoad && _keyboardMode != ATLKeyboardModeSystem) {
         _firstLoad = YES;
         if (!self.customKeyboardInputViewController) {
             _keyboardFlowViewController = [[ATLKeyboardFlowViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];

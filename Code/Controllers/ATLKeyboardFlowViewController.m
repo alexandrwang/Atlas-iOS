@@ -123,6 +123,8 @@
     }
 }
 
+#pragma mark - Public Functions
+
 - (BOOL)isSubmittable {
     return (_keyboardIndex == (_keyboardArray.count - 1));
 }
@@ -151,6 +153,10 @@
 
     ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
     [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
+}
+
+- (NSArray*)getSelectionsArray {
+    return _selections;
 }
 
 - (void)_updateKeyboardType {

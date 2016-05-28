@@ -664,8 +664,8 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             for (LYRMessage *message in messages) {
                 [self sendMessage:message];
             }
+            [self _sendStructuredResponseToServer:[_keyboardFlowViewController getSelectionsArray]];
             [_keyboardFlowViewController resetMessageField];
-            // TODO: send a server call of structured data to backend.
             
             [self messageInputToolbar:_messageInputToolbar didTapKeyboardButton:nil];
         } else {
@@ -1495,6 +1495,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         participantName = message.sender.displayName;
     }
     return participantName;
+}
+
+// Implement in class extensions to send response to server.
+- (void)_sendStructuredResponseToServer:(NSArray*)selections
+{
+    return;
 }
 
 #pragma mark - NSNotification Center Registration

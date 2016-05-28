@@ -666,6 +666,8 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             }
             [_keyboardFlowViewController resetMessageField];
             // TODO: send a server call of structured data to backend.
+            
+            [self messageInputToolbar:_messageInputToolbar didTapKeyboardButton:nil];
         } else {
             [_keyboardFlowViewController changePageInDirection:UIPageViewControllerNavigationDirectionForward];
         }

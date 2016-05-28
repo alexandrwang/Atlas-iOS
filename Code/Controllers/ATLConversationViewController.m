@@ -1393,6 +1393,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     [self configureCollectionViewElements];
     
+    shouldScrollToBottom = YES;
     if (shouldScrollToBottom)  {
         // We can't get the content size from the collection view because it will be out-of-date due to the above updates, but we can get the update-to-date size from the layout.
         CGSize contentSize = self.collectionView.collectionViewLayout.collectionViewContentSize;

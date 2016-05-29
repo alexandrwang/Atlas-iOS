@@ -596,6 +596,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     _messageInputToolbar.textInputView.dataDetectorTypes =UIDataDetectorTypeLink;
     _messageInputToolbar.textInputView.delegate = self;
     _messageInputToolbar.textInputView.tintColor = ATLBlueColor();
+    
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(textTapped:)];
+    
+    [self.messageInputToolbar.textInputView addGestureRecognizer:singleFingerTap];
 }
 
 #pragma mark - ATLMessageInputToolbarDelegate
@@ -737,6 +743,15 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     NSNumber *myNumber = [formatter numberFromString:[URL absoluteString]];
+    
+    _keyboardMode = ATLKeyboardModeCustom;
+    [self.messageInputToolbar endEditing:YES];
+    self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
+    [self.messageInputToolbar.textInputView reloadInputViews];
+    [self.messageInputToolbar.textInputView becomeFirstResponder];
+    [_messageInputToolbar switchToCustomKeyboard];
+    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
+    
     [_keyboardFlowViewController changePageToIndex:myNumber.integerValue];
     return NO;
 }
@@ -1547,6 +1562,29 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
     
     return YES;
+}
+
+- (void)textTapped:(UITapGestureRecognizer *)recognizer
+{
+    if (_keyboardMode == ATLKeyboardModeCustom) {
+        UITextView *textView = (UITextView *)recognizer.view;
+        
+        if (!self.customKeyboardInputViewController) {
+            _keyboardFlowViewController = [[ATLKeyboardFlowViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+            _keyboardFlowViewController.flowDelegate = self;
+            self.customKeyboardInputViewController = _keyboardFlowViewController;
+        }
+        
+        if (!self.messageInputToolbar.textInputView.inputView) {
+            _keyboardMode = ATLKeyboardModeCustom;
+            [self.messageInputToolbar endEditing:YES];
+            self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
+            [self.messageInputToolbar.textInputView reloadInputViews];
+            [self.messageInputToolbar.textInputView becomeFirstResponder];
+            [_messageInputToolbar switchToCustomKeyboard];
+            [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
+        }
+    }
 }
 
 @end

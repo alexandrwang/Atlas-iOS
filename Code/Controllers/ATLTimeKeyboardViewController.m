@@ -86,7 +86,7 @@ const CGFloat kVerticalSpacing = 8.0f;
 //                                  self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
 //                                  self.view.bounds.size.width - kHorizontalSpacing * 3 - CGRectGetWidth(_importButton.frame),
 //                                  kBottomBarHeight - kVerticalSpacing * 2);
-    CGFloat monthLabelHeight = 32.0f;
+    CGFloat monthLabelHeight = 42.0f;
     if (_dateLabel) {
         _dateLabel.frame = CGRectMake((self.view.bounds.size.width - _dateLabel.bounds.size.width) / 2, self.view.bounds.size.height - monthLabelHeight, _dateLabel.frame.size.width, monthLabelHeight);
     }

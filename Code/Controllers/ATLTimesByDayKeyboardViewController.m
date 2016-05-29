@@ -163,6 +163,18 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
 - (void)MBXPageChangedToIndex:(NSInteger)index
 {
     NSLog(@"%@ %ld", [self class], (long)index);
+    if (index == 0) {
+        _buttonPrev.hidden = YES;
+    } else if (index == [_dates count] - 1) {
+        _buttonNext.hidden = YES;
+    }
+
+    if (index > 0) {
+        _buttonPrev.hidden = NO;
+    }
+    if (index < [_dates count] - 1) {
+        _buttonNext.hidden = NO;
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -211,6 +223,8 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
 
         if (!isOneEmpty) {
             [self.delegate keyboard:self withType:ATLKeyboardTypeTimesByDay didUpdateSelection:self.selection];
+        } else {
+            [self.delegate keyboard:self withType:ATLKeyboardTypeTimesByDay didUpdateSelection:@[]];
         }
     }
 }
@@ -236,6 +250,14 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
     [self.view addSubview:_pageViewController.view];
     [self.view addSubview:_buttonNext];
     [self.view addSubview:_buttonPrev];
+    
+    // Hide buttons if they can't do anything
+    _buttonPrev.hidden = YES;
+    if ([_dates count] <= 1) {
+        _buttonNext.hidden = YES;
+    } else {
+        _buttonNext.hidden = NO;
+    }
     
     _buttonNext.layer.zPosition = 1;
     _buttonPrev.layer.zPosition = 1;

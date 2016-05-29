@@ -179,7 +179,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     self.messageInputToolbar.inputToolBarDelegate = self;
     self.addressBarController.delegate = self;
     self.canDisableAddressBar = YES;
-    [self atl_registerForNotifications];
+    //[self atl_registerForNotifications];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -602,12 +602,14 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapKeyboardButton:(UIButton *)keyboardButton
 {
     _keyboardMode = ATLKeyboardModeSystem;
+    [self.messageInputToolbar resignFirstResponder];
     [self.messageInputToolbar endEditing:YES];
     self.messageInputToolbar.textInputView.inputView = nil;
-    [self.messageInputToolbar.textInputView reloadInputViews];
     [self.messageInputToolbar.textInputView becomeFirstResponder];
+    [self.messageInputToolbar.textInputView reloadInputViews];
     [messageInputToolbar switchToDefaultKeyboard];
     [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:ATLKeyboardTypeDefault];
+    [self.messageInputToolbar.textInputView becomeFirstResponder];
 }
 
 // Switch to custom keyboard.
@@ -621,10 +623,9 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
     if (!self.messageInputToolbar.textInputView.inputView) {
         _keyboardMode = ATLKeyboardModeCustom;
-        [self.messageInputToolbar endEditing:YES];
         self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
-        [self.messageInputToolbar.textInputView reloadInputViews];
         [self.messageInputToolbar.textInputView becomeFirstResponder];
+        [self.messageInputToolbar.textInputView reloadInputViews];
         [messageInputToolbar switchToCustomKeyboard];
         [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
     }
@@ -664,7 +665,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             for (LYRMessage *message in messages) {
                 [self sendMessage:message];
             }
-            [self _sendStructuredResponseToServer:[_keyboardFlowViewController getSelectionsArray]];
+            //[self _sendStructuredResponseToServer:[_keyboardFlowViewController getSelectionsArray]];
             [_keyboardFlowViewController resetMessageField];
             // TODO: send a server call of structured data to backend.
         } else {
@@ -705,8 +706,6 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 }
 
 - (void)updateInputToolbarButtonsWithPage:(NSUInteger)page type:(ATLKeyboardType)type {
-    return;
-    
     if (type == ATLKeyboardTypeNone) {
         self.messageInputToolbar.goBackButton.hidden = YES;
         self.messageInputToolbar.rightAccessoryButton.hidden = YES;
@@ -722,7 +721,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             self.messageInputToolbar.rightAccessoryButton.enabled = NO;
         }
 
-        self.messageInputToolbar.textInputView.editable = NO;
+        //self.messageInputToolbar.textInputView.userInteractionEnabled = NO;
         [self.messageInputToolbar.textInputView setAttributedText:_keyboardFlowViewController.message];
     } else if (_keyboardMode == ATLKeyboardModeSystem) {
         self.messageInputToolbar.goBackButton.hidden = YES;
@@ -731,7 +730,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         [self.messageInputToolbar.rightAccessoryButton setTitle:@"Send" forState:UIControlStateNormal];
 
         self.messageInputToolbar.textInputView.text = @"";
-        self.messageInputToolbar.textInputView.editable = YES;
+        //self.messageInputToolbar.textInputView.userInteractionEnabled = YES;
     }
 }
 

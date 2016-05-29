@@ -49,7 +49,7 @@
     self.dataSourceArray = @[@"Primary Care",
                              @"Dentist",
                              @"Therapist",
-                             @"Physical Therapy",
+                             @"Physical Therapist",
                              @"Eye Doctor",
                              @"Dermatologist",
                              @"Ear, Nose, Throat",

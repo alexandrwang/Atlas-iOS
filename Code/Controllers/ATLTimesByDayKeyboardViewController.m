@@ -205,7 +205,7 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
         NSMutableArray *allTimes = [[NSMutableArray alloc] init];
         BOOL isOneEmpty = NO;
         for (ATLTimeKeyboardViewController* timeKeyboardViewController in _timeKeyboardViewControllers) {
-            NSMutableString *string = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@: ", timeKeyboardViewController.date]];
+            NSMutableString *string = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@ at ", timeKeyboardViewController.date]];
             for (int i = 0; i < timeKeyboardViewController.selection.count; i++) {
                 NSString *item = timeKeyboardViewController.selection[i];
                 [string appendString:item];

@@ -83,7 +83,7 @@
               @"Dentist"          : [UIImage imageNamed:@"dentist" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
               @"Therapist"        : [UIImage imageNamed:@"therapist" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
               @"Eye Doctor"      : [UIImage imageNamed:@"opt" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
-              @"Physical Therapy" : [UIImage imageNamed:@"pt" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
+              @"Physical Therapist" : [UIImage imageNamed:@"pt" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
               @"OB-GYN"           : [UIImage imageNamed:@"obgyn" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
               @"Dermatologist"           : [UIImage imageNamed:@"dermatalogist" inBundle:resourcesBundle compatibleWithTraitCollection:nil],
               @"Ear, Nose, Throat"           : [UIImage imageNamed:@"earnosethroat" inBundle:resourcesBundle compatibleWithTraitCollection:nil],

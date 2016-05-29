@@ -36,15 +36,18 @@
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[pick a specialist]",
                                  @"type" : @"pill"},
-                              @{ @"text" : @" for ",
-                                 @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick dates, press next]",
-                                 @"type" : @"date"},
+                              
                               @{ @"text" : @" near ",
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[pick location, press next]",
                                  @"type" : @"location"},
-                              @{ @"text" : @". These times should work: ",
+                              
+                              @{ @"text" : @" on ",
+                                 @"type" : @"plaintext"},
+                              @{ @"text" : @"[pick dates, press next]",
+                                 @"type" : @"date"},
+                              
+                              @{ @"text" : @" at times ",
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[pick times for each day, press send]",
                                  @"type" : @"timesByDay"},

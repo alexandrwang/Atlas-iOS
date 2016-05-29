@@ -29,24 +29,24 @@
 }
 
 // This is sample JSON data used to construct the keyboard flow and placeholder text.
-// Eventually you want to replace this with server
+// Eventually you want to replace this with server data.
 
-- (NSDictionary *)templateDataSource {
+- (NSDictionary *)sampleJSONData {
     return @{ @"message" : @[ @{ @"text" : @"I need a ",
                                  @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick a specialist]",
+                              @{ @"text" : @"[specialist]",
                                  @"type" : @"pill"},
                               @{ @"text" : @" for ",
                                  @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick dates, press next]",
+                              @{ @"text" : @"[date]",
                                  @"type" : @"date"},
                               @{ @"text" : @" near ",
                                  @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick location, press next]",
+                              @{ @"text" : @"[location]",
                                  @"type" : @"location"},
                               @{ @"text" : @". These times should work: ",
                                  @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick times for each day, press send]",
+                              @{ @"text" : @"[times]",
                                  @"type" : @"timesByDay"},
                             ]};
 }
@@ -74,7 +74,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self _parseJSONData:[self templateDataSource]];
+    [self _parseJSONData:[self sampleJSONData]];
     _selections = [[NSMutableArray alloc] init];
     _keyboardIndex = 0;
 
@@ -145,7 +145,7 @@
 }
 
 - (void)resetMessageField {
-    [self _parseJSONData:[self templateDataSource]];
+    [self _parseJSONData:[self sampleJSONData]];
     _selections = [[NSMutableArray alloc] init];
     _keyboardIndex = 0;
 
@@ -189,7 +189,7 @@
 - (void)_updateMessages:(BOOL)forceAllUpdates {
     NSMutableArray *messages = [[NSMutableArray alloc] init];
     NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:@""];
-    NSArray *dataArray = (NSArray *)[self templateDataSource][@"message"];
+    NSArray *dataArray = (NSArray *)[self sampleJSONData][@"message"];
     for (int i = 0; i < dataArray.count; i += 2) {
         NSDictionary *dict1 = dataArray[i];
         NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:dict1[@"text"]];

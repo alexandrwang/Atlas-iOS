@@ -132,7 +132,8 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         // Calling sizeThatFits: or contentSize on the displayed UITextView causes the cursor's position to momentarily appear out of place and prevent scrolling to the selected range. So we use another text view for height calculations.
         self.dummyTextView = [[ATLMessageComposeTextView alloc] init];
         self.maxNumberOfLines = 8;
-        
+
+        self.backgroundColor = [UIColor whiteColor];
         self.barTintColor = [UIColor whiteColor];
         
         self.clipsToBounds = YES;
@@ -353,6 +354,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
 - (void)goBackButtonTapped
 {
+    [self layoutSubviews];
     [self.inputToolBarDelegate messageInputToolbar:self didTapGoBackButton:self.goBackButton];
 }
 
@@ -417,6 +419,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
+    [self layoutSubviews];
     return YES;
 }
 

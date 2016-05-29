@@ -314,6 +314,7 @@ const CGFloat kMonthLabelHeight = 32.0f;
     if (_dateScrollView.contentOffset.y != 0) {
         _scrollPosition = _dateScrollView.contentOffset.y;
     }
+    scrollView.contentOffset = CGPointMake(0.0f, scrollView.contentOffset.y);
 }
 
 #pragma mark - Action methods
@@ -385,8 +386,8 @@ const CGFloat kMonthLabelHeight = 32.0f;
 
 - (void)layoutSubviews {
     CGFloat dayHeight = (self.bounds.size.height - kMonthLabelHeight) / 5.0f;
-    _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4);
-    _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * (_numberOfRows + 1));
+    _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 5);
+    _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * (_numberOfRows));
     _dateScrollView.contentOffset = CGPointMake(0, _scrollPosition);
 
     _hairlineView.frame = CGRectMake(0, 0, self.bounds.size.width, 1.0f / [[UIScreen mainScreen] nativeScale]);
@@ -404,10 +405,8 @@ const CGFloat kMonthLabelHeight = 32.0f;
     _dateScrollView.translatesAutoresizingMaskIntoConstraints = YES;
     [self addSubview:_dateScrollView];
 
-    NSLog(@"%f", _dateScrollView.contentSize.width);
     _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4);
     _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * 6);
-    NSLog(@"%f", _dateScrollView.contentSize.width);
 
     [_dateScrollView setAlwaysBounceHorizontal:NO];
     [_dateScrollView setAlwaysBounceVertical:YES];

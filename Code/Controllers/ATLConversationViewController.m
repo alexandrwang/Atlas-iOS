@@ -757,11 +757,13 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 #pragma mark - ATLKeyboardFlowViewControllerDelegate
 
 - (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didChangeToPage:(NSUInteger)page withType:(ATLKeyboardType)type {
+    [self.messageInputToolbar layoutSubviews];
     [self updateInputToolbarButtonsWithPage:page type:type];
 }
 
 - (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didUpdateSelection:(NSMutableArray *)selection {
     if (_keyboardMode == ATLKeyboardModeCustom) {
+        [self.messageInputToolbar layoutSubviews];
         self.messageInputToolbar.rightAccessoryButton.enabled = (selection.count > 0);
     }
 }

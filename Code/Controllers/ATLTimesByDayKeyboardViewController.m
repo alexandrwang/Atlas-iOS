@@ -192,6 +192,7 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
     
     if (type == ATLKeyboardTypeTime && [keyboard isKindOfClass:ATLTimeKeyboardViewController.class]) {
         NSMutableArray *allTimes = [[NSMutableArray alloc] init];
+        BOOL isOneEmpty = NO;
         for (ATLTimeKeyboardViewController* timeKeyboardViewController in _timeKeyboardViewControllers) {
             NSMutableString *string = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"%@: ", timeKeyboardViewController.date]];
             for (int i = 0; i < timeKeyboardViewController.selection.count; i++) {
@@ -201,11 +202,17 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
                     [string appendString:@", "];
                 }
             }
+            if (timeKeyboardViewController.selection.count == 0) {
+                isOneEmpty = YES;
+            }
             [allTimes addObject:string];
         }
 
         self.selection = [allTimes copy];
-        [self.delegate keyboard:self withType:ATLKeyboardTypeTimesByDay didUpdateSelection:self.selection];
+        
+        if (!isOneEmpty) {
+            [self.delegate keyboard:self withType:ATLKeyboardTypeTimesByDay didUpdateSelection:self.selection];
+        }
     }
 }
 

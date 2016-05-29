@@ -596,12 +596,6 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     _messageInputToolbar.textInputView.dataDetectorTypes =UIDataDetectorTypeLink;
     _messageInputToolbar.textInputView.delegate = self;
     _messageInputToolbar.textInputView.tintColor = ATLBlueColor();
-    
-    UITapGestureRecognizer *singleFingerTap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(textTapped:)];
-    
-    [self.messageInputToolbar.textInputView addGestureRecognizer:singleFingerTap];
 }
 
 #pragma mark - ATLMessageInputToolbarDelegate
@@ -627,6 +621,11 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         _keyboardFlowViewController = [[ATLKeyboardFlowViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
         _keyboardFlowViewController.flowDelegate = self;
         self.customKeyboardInputViewController = _keyboardFlowViewController;
+        UITapGestureRecognizer *singleFingerTap =
+        [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(textTapped:)];
+        
+        [self.messageInputToolbar.textInputView addGestureRecognizer:singleFingerTap];
     }
     
     if (!self.messageInputToolbar.textInputView.inputView) {
@@ -1539,6 +1538,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
             _keyboardFlowViewController = [[ATLKeyboardFlowViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
             _keyboardFlowViewController.flowDelegate = self;
             self.customKeyboardInputViewController = _keyboardFlowViewController;
+            
+            UITapGestureRecognizer *singleFingerTap =
+            [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                    action:@selector(textTapped:)];
+            
+            [self.messageInputToolbar.textInputView addGestureRecognizer:singleFingerTap];
         }
         
         if (!self.messageInputToolbar.textInputView.inputView) {
@@ -1565,6 +1570,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)textTapped:(UITapGestureRecognizer *)recognizer
 {
+    if (_firstLoad) {
+        _firstLoad = YES;
+    }
+    
     if (_keyboardMode == ATLKeyboardModeCustom) {
         UITextView *textView = (UITextView *)recognizer.view;
         

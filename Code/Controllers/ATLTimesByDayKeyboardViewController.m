@@ -226,6 +226,8 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
         
         if (!isOneEmpty) {
             [self.delegate keyboard:self withType:ATLKeyboardTypeTimesByDay didUpdateSelection:self.selection];
+        } else {
+            [self.delegate keyboard:self withType:ATLKeyboardTypeTimesByDay didUpdateSelection:@[]];
         }
     }
 }

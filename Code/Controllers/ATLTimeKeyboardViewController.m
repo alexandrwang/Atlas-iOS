@@ -100,8 +100,7 @@ const CGFloat kVerticalSpacing = 8.0f;
     self.dataSourceArray = @[@"8:00 - 9:00 AM",   @"9:00 - 10:00 AM", @"10:00 - 11:00 AM",
                              @"11:00 - 12:00 PM", @"12:00 - 1:00 PM", @"1:00 - 2:00 PM",
                              @"2:00 - 3:00 PM",   @"3:00 - 4:00 PM",  @"4:00 - 5:00 PM",
-                             @"5:00 - 6:00 PM",   @"6:00 - 7:00 PM",  @"7:00 - 8:00 PM",
-                             @"8:00 - 9:00 PM"];
+                             @"5:00 - 6:00 PM"];
 }
 
 - (void)configureCell:(ATLTimeKeyboardCollectionViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
@@ -135,7 +134,7 @@ const CGFloat kVerticalSpacing = 8.0f;
 #pragma mark - UICollectionViewDataSource
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 13;
+    return 10;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

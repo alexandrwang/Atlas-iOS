@@ -751,7 +751,6 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     [self.messageInputToolbar.textInputView becomeFirstResponder];
     [_messageInputToolbar switchToCustomKeyboard];
     [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
-    
     [_keyboardFlowViewController changePageToIndex:myNumber.integerValue];
     return NO;
 }

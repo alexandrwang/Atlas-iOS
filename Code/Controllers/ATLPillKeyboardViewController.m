@@ -28,7 +28,7 @@
 
     self.customJustifiedFlowLayout = [[ERJustifiedFlowLayout alloc] init];
     self.customJustifiedFlowLayout.horizontalJustification = FlowLayoutHorizontalJustificationLeft;
-    self.customJustifiedFlowLayout.sectionInset = UIEdgeInsetsMake(14, 14, 0, 14);
+    self.customJustifiedFlowLayout.sectionInset = UIEdgeInsetsMake(14, 12, 14, 10);
     self.customJustifiedFlowLayout.horizontalCellPadding = 10.0f;
 
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:self.customJustifiedFlowLayout];
@@ -46,7 +46,25 @@
 
 - (void)loadView {
     [super loadView];
-    self.dataSourceArray = @[@"Doctor", @"Dentist", @"Therapist", @"Optometrist", @"Physical Therapy", @"OB-GYN", @"Other"];
+    self.dataSourceArray = @[@"Primary Care",
+                             @"Dentist",
+                             @"Therapist",
+                             @"Physical Therapy",
+                             @"Eye Doctor",
+                             @"Dermatologist",
+                             @"Ear, Nose, Throat",
+                             @"Psychiatrist",
+                             @"Orthopedic Surgeon",
+                             @"OB-GYN",
+                             @"Massage Therapist",
+                             @"Other"
+                             ];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -54,7 +72,9 @@
 }
 
 - (void)configureCell:(ATLPillKeyboardCollectionViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    cell.labelText = self.dataSourceArray[indexPath.row % self.dataSourceArray.count];
+    [cell setLabelText:self.dataSourceArray[indexPath.row % self.dataSourceArray.count]];
+//    cell.labelText = @"Primary Care";
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -65,12 +85,11 @@
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 7;
+    return 12;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ATLPillKeyboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ATLPillKeyboardCollectionViewCell" forIndexPath:indexPath];
-
     [self configureCell:cell forIndexPath:indexPath];
     return cell;
 }

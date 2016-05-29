@@ -18,7 +18,6 @@
 - (BOOL)isSubmittable;
 - (void)fillInAllFields;
 - (void)resetMessageField;
-- (void)updateKeyboardType;
 - (NSArray*)getSelectionsArray;
 
 @property (nonatomic, weak) id<ATLKeyboardFlowViewControllerDelegate> flowDelegate;

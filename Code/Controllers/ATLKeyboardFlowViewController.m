@@ -40,14 +40,14 @@
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[date]",
                                  @"type" : @"date"},
+                              @{ @"text" : @" near ",
+                                 @"type" : @"plaintext"},
+                              @{ @"text" : @"[location]",
+                                 @"type" : @"location"},
                               @{ @"text" : @". These times should work: ",
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[times]",
                                  @"type" : @"timesByDay"},
-                              @{ @"text" : @". I need one near ",
-                                 @"type" : @"plaintext"},
-                              @{ @"text" : @"[location]",
-                                 @"type" : @"location"},
                             ]};
 }
 
@@ -61,10 +61,10 @@
             [array addObject:[[ATLDateKeyboardViewController alloc] init]];
         } else if ([dict[@"type"] isEqualToString:@"location"]) {
             [array addObject:[[ATLLocationKeyboardViewController alloc] init]];
-        } else if ([dict[@"type"] isEqualToString:@"time"]) {
-            [array addObject:[[ATLTimeKeyboardViewController alloc] init]];
         } else if ([dict[@"type"] isEqualToString:@"timesByDay"]) {
             [array addObject:[[ATLTimesByDayKeyboardViewController alloc] init]];
+        } else if ([dict[@"type"] isEqualToString:@"time"]) {
+            [array addObject:[[ATLTimeKeyboardViewController alloc] init]];
         }
     }
 
@@ -86,7 +86,7 @@
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:YES
                   completion:^(BOOL finished) {}];
-    [self updateKeyboardType];
+    [self _updateKeyboardType];
     [self _updateMessages:NO];
     [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
 
@@ -100,16 +100,16 @@
     if ((direction == UIPageViewControllerNavigationDirectionForward && _keyboardIndex < (_keyboardArray.count - 1)) ||
         (direction == UIPageViewControllerNavigationDirectionReverse && _keyboardIndex > 0)) {
         _keyboardIndex = (direction == UIPageViewControllerNavigationDirectionForward ? _keyboardIndex + 1 : _keyboardIndex - 1);
-
+        
+        // update the days if we're going to a TimesByDay keyboard
         if ([_keyboardArray[_keyboardIndex] isKindOfClass:ATLTimesByDayKeyboardViewController.class]) {
             [_keyboardArray[_keyboardIndex] setDates:_dates];
         }
-
         [self setViewControllers:@[_keyboardArray[_keyboardIndex]]
                        direction:direction
                         animated:YES
                       completion:^(BOOL finished) {}];
-        [self updateKeyboardType];
+        [self _updateKeyboardType];
         [self _updateMessages:NO];
         [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
         ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
@@ -125,13 +125,15 @@
                        direction:UIPageViewControllerNavigationDirectionReverse
                         animated:YES
                       completion:^(BOOL finished) {}];
-        [self updateKeyboardType];
+        [self _updateKeyboardType];
         [self _updateMessages:NO];
         [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
         ATLKeyboardViewController *viewController = _keyboardArray[_keyboardIndex];
         [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
     }
 }
+
+#pragma mark - Public Functions
 
 - (BOOL)isSubmittable {
     return (_keyboardIndex == (_keyboardArray.count - 1));
@@ -155,7 +157,7 @@
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:YES
                   completion:^(BOOL finished) {}];
-    [self updateKeyboardType];
+    [self _updateKeyboardType];
     [self _updateMessages:NO];
     [self.flowDelegate keyboardFlowViewController:self didChangeToPage:_keyboardIndex withType:_keyboardType];
 
@@ -167,19 +169,19 @@
     return _selections;
 }
 
-- (void)updateKeyboardType {
+- (void)_updateKeyboardType {
     UIViewController *keyboard = _keyboardArray[_keyboardIndex];
     ATLKeyboardType type = ATLKeyboardTypeDefault;
     if ([keyboard isKindOfClass:[ATLPillKeyboardViewController class]]) {
         type = ATLKeyboardTypePill;
     } else if ([keyboard isKindOfClass:[ATLTimeKeyboardViewController class]]) {
         type = ATLKeyboardTypeTime;
+    } else if ([keyboard isKindOfClass:[ATLTimesByDayKeyboardViewController class]]) {
+        type = ATLKeyboardTypeTimesByDay;
     } else if ([keyboard isKindOfClass:[ATLDateKeyboardViewController class]]) {
         type = ATLKeyboardTypeDate;
     } else if ([keyboard isKindOfClass:[ATLLocationKeyboardViewController class]]) {
         type = ATLKeyboardTypeLocation;
-    } else if ([keyboard isKindOfClass:[ATLTimesByDayKeyboardViewController class]]) {
-        type = ATLKeyboardTypeTimesByDay;
     }
     _keyboardType = type;
 }

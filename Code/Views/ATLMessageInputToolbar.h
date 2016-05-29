@@ -64,8 +64,6 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  */
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapKeyboardButton:(UIButton *)keyboardButton;
 
-- (BOOL)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange;
-
 @optional
 
 /**

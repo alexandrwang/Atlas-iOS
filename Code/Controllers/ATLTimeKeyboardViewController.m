@@ -33,12 +33,12 @@ const CGFloat kVerticalSpacing = 8.0f;
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.flowLayout.minimumLineSpacing = 1.0f;
     self.flowLayout.minimumInteritemSpacing = 1.0f;
-
+    
     _collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:self.flowLayout];
     _collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView registerClass:[ATLTimeKeyboardCollectionViewCell class] forCellWithReuseIdentifier:@"ATLTimeKeyboardCollectionViewCell"];
     self.sizingCell = [[ATLTimeKeyboardCollectionViewCell alloc] init];
-
+    
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     _collectionView.alwaysBounceVertical = YES;
@@ -52,15 +52,15 @@ const CGFloat kVerticalSpacing = 8.0f;
     _gradientView.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:_gradientView];
 
-    //    _importButton = [[ATLButton alloc] init];
-    //    [_importButton setTitle:@"Import Calendar" forState:UIControlStateNormal];
-    //    [_importButton setTitleColor:[UIColor colorWithRed:0.33 green:0.73 blue:0.88 alpha:1.0] forState:UIControlStateNormal];
-    //    [self.view addSubview:_importButton];
-    //
-    //    _addButton = [[ATLButton alloc] init];
-    //    [_addButton setTitle:@"Add Alternative Dates" forState:UIControlStateNormal];
-    //    [_addButton setTitleColor:[UIColor colorWithRed:0.33 green:0.73 blue:0.88 alpha:1.0] forState:UIControlStateNormal];
-    //    [self.view addSubview:_addButton];
+//    _importButton = [[ATLButton alloc] init];
+//    [_importButton setTitle:@"Import Calendar" forState:UIControlStateNormal];
+//    [_importButton setTitleColor:[UIColor colorWithRed:0.33 green:0.73 blue:0.88 alpha:1.0] forState:UIControlStateNormal];
+//    [self.view addSubview:_importButton];
+//
+//    _addButton = [[ATLButton alloc] init];
+//    [_addButton setTitle:@"Add Alternative Dates" forState:UIControlStateNormal];
+//    [_addButton setTitleColor:[UIColor colorWithRed:0.33 green:0.73 blue:0.88 alpha:1.0] forState:UIControlStateNormal];
+//    [self.view addSubview:_addButton];
 
     _selectedIndices = [[NSMutableArray alloc] init];
     return self;
@@ -79,13 +79,13 @@ const CGFloat kVerticalSpacing = 8.0f;
 
 - (void)viewDidLayoutSubviews {
     _collectionView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - kBottomBarHeight + 10);
-    //    _importButton.frame = CGRectMake(kHorizontalSpacing,
-    //                                     self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
-    //                                     150, kBottomBarHeight - kVerticalSpacing * 2);
-    //    _addButton.frame = CGRectMake(CGRectGetMaxX(_importButton.frame) + kHorizontalSpacing,
-    //                                  self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
-    //                                  self.view.bounds.size.width - kHorizontalSpacing * 3 - CGRectGetWidth(_importButton.frame),
-    //                                  kBottomBarHeight - kVerticalSpacing * 2);
+//    _importButton.frame = CGRectMake(kHorizontalSpacing,
+//                                     self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
+//                                     150, kBottomBarHeight - kVerticalSpacing * 2);
+//    _addButton.frame = CGRectMake(CGRectGetMaxX(_importButton.frame) + kHorizontalSpacing,
+//                                  self.view.bounds.size.height - kBottomBarHeight + kVerticalSpacing,
+//                                  self.view.bounds.size.width - kHorizontalSpacing * 3 - CGRectGetWidth(_importButton.frame),
+//                                  kBottomBarHeight - kVerticalSpacing * 2);
     CGFloat monthLabelHeight = 32.0f;
     if (_dateLabel) {
         _dateLabel.frame = CGRectMake((self.view.bounds.size.width - _dateLabel.bounds.size.width) / 2, self.view.bounds.size.height - monthLabelHeight, _dateLabel.frame.size.width, monthLabelHeight);
@@ -140,7 +140,7 @@ const CGFloat kVerticalSpacing = 8.0f;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ATLTimeKeyboardCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ATLTimeKeyboardCollectionViewCell" forIndexPath:indexPath];
-
+    
     [self configureCell:cell forIndexPath:indexPath];
     return cell;
 }

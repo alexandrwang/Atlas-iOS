@@ -145,9 +145,4 @@ static NSString *const ATLPlaceholderText = @"Send something to Ava";
     self.placeholderLabel.hidden = self.attributedText.length > 0;
 }
 
-- (void)performBecomeEditableTasks {
-
-}
-
-
 @end

@@ -278,10 +278,16 @@ const CGFloat kMonthLabelHeight = 32.0f;
     BOOL isSelected = NO;
     for (NSDate *current in _selectedDates) {
         if ([current compare:date] == NSOrderedSame) {
-            [button setTitleColor:_dayTxtColorSelected forState:UIControlStateNormal];
-            [button setBackgroundColor:_dayBgColorSelected];
-            isSelected = YES;
-            break;
+            NSDateComponents *currentComponents = [_gregorian components:_dayInfoUnits fromDate:current];
+            NSDateComponents *monthComponents = [_gregorian components:_dayInfoUnits fromDate:_calendarDate];
+            if (currentComponents.month == monthComponents.month) {
+                [button setTitleColor:_dayTxtColorSelected forState:UIControlStateNormal];
+                [button setBackgroundColor:_dayBgColorSelected];
+                isSelected = YES;
+                break;
+            } else {
+
+            }
         }
     }
 
@@ -374,12 +380,13 @@ const CGFloat kMonthLabelHeight = 32.0f;
 
     // Finally, notify the delegate
     //[_delegate dayChangedToDate:_selectedDate];
+
 }
 
 - (void)layoutSubviews {
     CGFloat dayHeight = (self.bounds.size.height - kMonthLabelHeight) / 5.0f;
     _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4);
-    _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * _numberOfRows);
+    _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * (_numberOfRows + 1));
     _dateScrollView.contentOffset = CGPointMake(0, _scrollPosition);
 
     _hairlineView.frame = CGRectMake(0, 0, self.bounds.size.width, 1.0f / [[UIScreen mainScreen] nativeScale]);
@@ -396,8 +403,12 @@ const CGFloat kMonthLabelHeight = 32.0f;
     _dateScrollView.delegate = self;
     _dateScrollView.translatesAutoresizingMaskIntoConstraints = YES;
     [self addSubview:_dateScrollView];
+
+    NSLog(@"%f", _dateScrollView.contentSize.width);
     _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4);
     _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * 6);
+    NSLog(@"%f", _dateScrollView.contentSize.width);
+
     [_dateScrollView setAlwaysBounceHorizontal:NO];
     [_dateScrollView setAlwaysBounceVertical:YES];
 

@@ -57,6 +57,7 @@ typedef enum {
     ATLKeyboardTypeDate,
     ATLKeyboardTypeLocation,
     ATLKeyboardTypeTime,
+    ATLKeyboardTypeTimesByDay,
 } ATLKeyboardType;
 
 //-------------------

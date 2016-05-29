@@ -157,6 +157,10 @@
 		7858B6551CE54BBE007795AB /* plus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7858B61E1CE54BBE007795AB /* plus@3x.png */; };
 		7858B6561CE54BBE007795AB /* plus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7858B61E1CE54BBE007795AB /* plus@3x.png */; };
 		7858B6571CE54BBE007795AB /* plus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7858B61E1CE54BBE007795AB /* plus@3x.png */; };
+		896D0BEC1CFAD86D009EEEC9 /* MBXPageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 896D0BEA1CFAD86D009EEEC9 /* MBXPageViewController.h */; };
+		896D0BED1CFAD86D009EEEC9 /* MBXPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 896D0BEB1CFAD86D009EEEC9 /* MBXPageViewController.m */; };
+		896D0BF01CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 896D0BEE1CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.h */; };
+		896D0BF11CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 896D0BEF1CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.m */; };
 		8F5A8821F40061D9FC6CBB4F /* Pods_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1886043CF840E83E9A77B78B /* Pods_UnitTests.framework */; };
 		917DFA240CA4D2A4EFD8C2DF /* Pods_test_StoryboardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62363A00A270318F0E8C0C38 /* Pods_test_StoryboardTests.framework */; };
 		D0294DE71A93F37A00702856 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0294DE61A93F37A00702856 /* Info.plist */; };
@@ -363,6 +367,10 @@
 		7858B61D1CE54BBE007795AB /* plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "plus@2x.png"; path = "Resources/plus@2x.png"; sourceTree = "<group>"; };
 		7858B61E1CE54BBE007795AB /* plus@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "plus@3x.png"; path = "Resources/plus@3x.png"; sourceTree = "<group>"; };
 		886A86EFB93A13A1717104CE /* Pods-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTests/Pods-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		896D0BEA1CFAD86D009EEEC9 /* MBXPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBXPageViewController.h; sourceTree = "<group>"; };
+		896D0BEB1CFAD86D009EEEC9 /* MBXPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBXPageViewController.m; sourceTree = "<group>"; };
+		896D0BEE1CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATLTimesByDayKeyboardViewController.h; sourceTree = "<group>"; };
+		896D0BEF1CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATLTimesByDayKeyboardViewController.m; sourceTree = "<group>"; };
 		91A456BCEC404FC7F83EC216 /* Pods-Storyboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storyboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-Storyboard/Pods-Storyboard.release.xcconfig"; sourceTree = "<group>"; };
 		921B2F42195B3C5F0569C57B /* Pods_Storyboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Storyboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		959F1869E1FC45A3651F40B6 /* Pods-test-StoryboardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test-StoryboardTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-test-StoryboardTests/Pods-test-StoryboardTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -502,7 +510,6 @@
 			children = (
 				253C29AF1C3C9E0000ED1549 /* Atlas.h */,
 				253C29B01C3C9E0000ED1549 /* Atlas.m */,
-				89F6D9361CCD646200999323 /* THCalendarDatePicker */,
 				253C29B11C3C9E0000ED1549 /* Controllers */,
 				253C29BE1C3C9E0000ED1549 /* Models */,
 				253C29C71C3C9E0000ED1549 /* Protocols */,
@@ -521,6 +528,10 @@
 				253C29B51C3C9E0000ED1549 /* ATLBaseConversationViewController.m */,
 				253C29B61C3C9E0000ED1549 /* ATLConversationListViewController.h */,
 				253C29B71C3C9E0000ED1549 /* ATLConversationListViewController.m */,
+				896D0BEA1CFAD86D009EEEC9 /* MBXPageViewController.h */,
+				896D0BEB1CFAD86D009EEEC9 /* MBXPageViewController.m */,
+				896D0BEE1CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.h */,
+				896D0BEF1CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.m */,
 				253C29B81C3C9E0000ED1549 /* ATLConversationViewController.h */,
 				253C29B91C3C9E0000ED1549 /* ATLConversationViewController.m */,
 				253C29BA1C3C9E0000ED1549 /* ATLParticipantTableViewController.h */,
@@ -895,7 +906,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89F6D9411CCD646200999323 /* NSDate+Difference.h in Headers */,
 				253C2A361C3C9E0000ED1549 /* ATLConversationCollectionView.h in Headers */,
 				253C2A261C3C9E0000ED1549 /* ATLMediaInputStream.h in Headers */,
 				253C2A131C3C9E0000ED1549 /* ATLConversationDataSource.h in Headers */,
@@ -917,15 +927,12 @@
 				253C2A481C3C9E0000ED1549 /* ATLMessageComposeTextView.h in Headers */,
 				253C2A1B1C3C9E0000ED1549 /* ATLAvatarItem.h in Headers */,
 				253C2A0F1C3C9E0000ED1549 /* ATLParticipantTableViewController.h in Headers */,
-				89F6D9431CCD646200999323 /* THDateDay.h in Headers */,
 				253C2A1C1C3C9E0000ED1549 /* ATLConversationPresenting.h in Headers */,
 				253C2A1D1C3C9E0000ED1549 /* ATLMessagePresenting.h in Headers */,
-				89F6D9461CCD646200999323 /* THDatePickerViewController.h in Headers */,
 				253C2A341C3C9E0000ED1549 /* ATLAvatarImageView.h in Headers */,
 				253C2A071C3C9E0000ED1549 /* ATLAddressBarViewController.h in Headers */,
 				253C2A201C3C9E0000ED1549 /* ATLConstants.h in Headers */,
 				253C2A3E1C3C9E0000ED1549 /* ATLConversationTableViewCell.h in Headers */,
-				89F6D94B1CCD650300999323 /* UIViewController+KNSemiModal.h in Headers */,
 				253C2A381C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.h in Headers */,
 				253C2A4C1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.h in Headers */,
 				253C2A2C1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.h in Headers */,
@@ -943,6 +950,8 @@
 				251C57AF1C5AA21200110871 /* ATLBaseCollectionViewCell.h in Headers */,
 				253C2A441C3C9E0000ED1549 /* ATLMessageBubbleView.h in Headers */,
 				253C2A1F1C3C9E0000ED1549 /* ATLParticipantPresenting.h in Headers */,
+				896D0BF01CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.h in Headers */,
+				896D0BEC1CFAD86D009EEEC9 /* MBXPageViewController.h in Headers */,
 				253C2A421C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1479,14 +1488,14 @@
 				253C2A371C3C9E0000ED1549 /* ATLConversationCollectionView.m in Sources */,
 				253C2A431C3C9E0000ED1549 /* ATLIncomingMessageCollectionViewCell.m in Sources */,
 				253C2A3D1C3C9E0000ED1549 /* ATLConversationCollectionViewMoreMessagesHeader.m in Sources */,
-				89F6D9441CCD646200999323 /* THDateDay.m in Sources */,
-				89F6D94C1CCD650300999323 /* UIViewController+KNSemiModal.m in Sources */,
 				253C2A511C3C9E0000ED1549 /* ATLParticipantTableViewCell.m in Sources */,
 				253C2A081C3C9E0000ED1549 /* ATLAddressBarViewController.m in Sources */,
 				253C2A411C3C9E0000ED1549 /* ATLConversationView.m in Sources */,
 				253C2A391C3C9E0000ED1549 /* ATLConversationCollectionViewFooter.m in Sources */,
 				253C2A331C3C9E0000ED1549 /* ATLAddressBarView.m in Sources */,
 				253C2A2F1C3C9E0000ED1549 /* ATLAddressBarContainerView.m in Sources */,
+				896D0BF11CFAD875009EEEC9 /* ATLTimesByDayKeyboardViewController.m in Sources */,
+				896D0BED1CFAD86D009EEEC9 /* MBXPageViewController.m in Sources */,
 				253C2A471C3C9E0000ED1549 /* ATLMessageCollectionViewCell.m in Sources */,
 				253C2A141C3C9E0000ED1549 /* ATLConversationDataSource.m in Sources */,
 				253C2A4F1C3C9E0000ED1549 /* ATLParticipantSectionHeaderView.m in Sources */,
@@ -1495,11 +1504,9 @@
 				253C2A161C3C9E0000ED1549 /* ATLDataSourceChange.m in Sources */,
 				5AEF68821C75284300808463 /* LYRIdentity+ATLParticipant.m in Sources */,
 				253C2A531C3C9E0000ED1549 /* ATLPlayView.m in Sources */,
-				89F6D9421CCD646200999323 /* NSDate+Difference.m in Sources */,
 				253C2A2D1C3C9E0000ED1549 /* UIResponder+ATLFirstResponder.m in Sources */,
 				253C2A231C3C9E0000ED1549 /* ATLErrors.m in Sources */,
 				253C2A251C3C9E0000ED1549 /* ATLLocationManager.m in Sources */,
-				89F6D9471CCD646200999323 /* THDatePickerViewController.m in Sources */,
 				253C2A4D1C3C9E0000ED1549 /* ATLOutgoingMessageCollectionViewCell.m in Sources */,
 				253C2A451C3C9E0000ED1549 /* ATLMessageBubbleView.m in Sources */,
 				253C2A181C3C9E0000ED1549 /* ATLMediaAttachment.m in Sources */,

@@ -113,15 +113,14 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
     CGFloat buttonOffset = 42.0f;
     
     _buttonPrev = [[UIButton alloc] initWithFrame:CGRectMake(buttonOffset, self.view.bounds.size.height - timeViewMonthLabelHeight, timeViewMonthLabelHeight, timeViewMonthLabelHeight)];
-    [_buttonPrev setImage:[UIImage imageNamed:@"arrow" inBundle:resourcesBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
+    [_buttonPrev setImage:[UIImage imageNamed:@"previous" inBundle:resourcesBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [_buttonPrev setTitleColor:_monthAndDayTextColor forState:UIControlStateNormal];
 //    [_buttonPrev addTarget:self action:@selector(showPreviousMonth) forControlEvents:UIControlEventTouchUpInside];
     _buttonPrev.titleLabel.font          = _defaultFont;
-    _buttonPrev.imageView.transform = CGAffineTransformMakeScale(-1, 1);
     [self.view addSubview:_buttonPrev];
     
     _buttonNext          = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - timeViewMonthLabelHeight - buttonOffset, self.view.bounds.size.height - timeViewMonthLabelHeight, timeViewMonthLabelHeight, timeViewMonthLabelHeight)];
-    [_buttonNext setImage:[UIImage imageNamed:@"arrow" inBundle:resourcesBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
+    [_buttonNext setImage:[UIImage imageNamed:@"next" inBundle:resourcesBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
     [_buttonNext setTitleColor:_monthAndDayTextColor forState:UIControlStateNormal];
 //    [_buttonNext addTarget:self action:@selector(showNextMonth) forControlEvents:UIControlEventTouchUpInside];
     _buttonNext.titleLabel.font          = _defaultFont;
@@ -167,10 +166,10 @@ const CGFloat timeViewMonthLabelHeight = 32.0f;
 }
 
 - (void)viewDidLayoutSubviews {
-    CGFloat buttonOffset = 42.0f;
+    CGFloat buttonOffset = 22.0f;
     _pageViewController.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-    _buttonPrev.frame = CGRectMake(buttonOffset, self.view.bounds.size.height - timeViewMonthLabelHeight, timeViewMonthLabelHeight, timeViewMonthLabelHeight);
-    _buttonNext.frame = CGRectMake(self.view.bounds.size.width - timeViewMonthLabelHeight - buttonOffset, self.view.bounds.size.height - timeViewMonthLabelHeight, timeViewMonthLabelHeight, timeViewMonthLabelHeight);
+    _buttonPrev.frame = CGRectMake(buttonOffset, self.view.bounds.size.height - timeViewMonthLabelHeight, 152/2, 48/2);
+    _buttonNext.frame = CGRectMake(self.view.bounds.size.width - (152/2) - buttonOffset, self.view.bounds.size.height - timeViewMonthLabelHeight, 152/2, 48/2);
 }
 
 - (void)updatedSelection:(NSMutableArray *)selection {

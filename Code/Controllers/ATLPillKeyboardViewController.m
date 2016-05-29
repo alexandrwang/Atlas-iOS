@@ -46,7 +46,7 @@
 
 - (void)loadView {
     [super loadView];
-    self.dataSourceArray = @[@"Doctor", @"Dentist", @"Therapist", @"Optometrist", @"Physical Therapy", @"OB-GYN", @"Other"];
+    self.dataSourceArray = @[@"Doctor", @"Dentist", @"Therapist", @"Optometrist", @"Physical Therapy", @"OB-GYN"];
 }
 
 - (void)viewDidLayoutSubviews {

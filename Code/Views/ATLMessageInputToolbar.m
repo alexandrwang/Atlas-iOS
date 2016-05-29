@@ -125,6 +125,8 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         self.textInputView.layer.borderWidth = 0;
         self.textInputView.layer.cornerRadius = 5.0f;
         self.textInputView.autocorrectionType = UITextAutocorrectionTypeNo;
+        UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textInputViewTapped)];
+        [self.textInputView addGestureRecognizer:tgr];
         [self addSubview:self.textInputView];
         
         self.verticalMargin = ATLVerticalMargin;
@@ -134,6 +136,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         self.maxNumberOfLines = 8;
         
         self.barTintColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor whiteColor];
         
         self.clipsToBounds = YES;
         self.translucent = NO;
@@ -341,6 +344,11 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
 #pragma mark - Actions
 
+- (void)textInputViewTapped
+{
+    [self.inputToolBarDelegate messageInputToolbar:self didTapInputView:self.textInputView];
+}
+
 - (void)leftAccessoryButtonTapped
 {
     [self.inputToolBarDelegate messageInputToolbar:self didTapLeftAccessoryButton:self.leftAccessoryButton];
@@ -417,7 +425,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    return YES;
+    return [self.inputToolBarDelegate messageInputToolbar:self shouldInteractWithURL:URL inRange:characterRange];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange

@@ -14,8 +14,4 @@
 
 @interface ATLTimeKeyboardViewController : ATLKeyboardViewController
 
-@property (nonatomic, strong) NSString* date;
-
--(void) setupDateLabel:(NSString*)date;
-
 @end

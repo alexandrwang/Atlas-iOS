@@ -374,13 +374,12 @@ const CGFloat kMonthLabelHeight = 32.0f;
 
     // Finally, notify the delegate
     //[_delegate dayChangedToDate:_selectedDate];
-
 }
 
 - (void)layoutSubviews {
     CGFloat dayHeight = (self.bounds.size.height - kMonthLabelHeight) / 5.0f;
-    _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4 + 30);
-    _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * (_numberOfRows + 1));
+    _dateScrollView.frame = CGRectMake(0, dayHeight, _dayWidth * 7, dayHeight * 4);
+    _dateScrollView.contentSize = CGSizeMake(_dayWidth * 7, dayHeight * _numberOfRows);
     _dateScrollView.contentOffset = CGPointMake(0, _scrollPosition);
 
     _hairlineView.frame = CGRectMake(0, 0, self.bounds.size.width, 1.0f / [[UIScreen mainScreen] nativeScale]);

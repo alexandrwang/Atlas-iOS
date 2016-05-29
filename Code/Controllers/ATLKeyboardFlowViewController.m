@@ -11,14 +11,11 @@
 #import "ATLDateKeyboardViewController.h"
 #import "ATLPillKeyboardViewController.h"
 #import "ATLTimeKeyboardViewController.h"
-#import "ATLTimesByDayKeyboardViewController.h"
 #import "ATLLocationKeyboardViewController.h"
 #import "ATLMessagingUtilities.h"
 #import "CMAddressSearchViewController.h"
 
 @interface ATLKeyboardFlowViewController () < ATLKeyboardDelegate, CMAddressSearchDelegate>
-
-@property (nonatomic, strong) NSArray *dates;
 
 @end
 
@@ -40,14 +37,14 @@
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[date]",
                                  @"type" : @"date"},
-                              @{ @"text" : @" near ",
-                                 @"type" : @"plaintext"},
-                              @{ @"text" : @"[location]",
-                                 @"type" : @"location"},
                               @{ @"text" : @". These times should work: ",
                                  @"type" : @"plaintext"},
                               @{ @"text" : @"[times]",
-                                 @"type" : @"timesByDay"},
+                                 @"type" : @"time"},
+                              @{ @"text" : @". I need one near ",
+                                 @"type" : @"plaintext"},
+                              @{ @"text" : @"[location]",
+                                 @"type" : @"location"},
                             ]};
 }
 
@@ -61,8 +58,6 @@
             [array addObject:[[ATLDateKeyboardViewController alloc] init]];
         } else if ([dict[@"type"] isEqualToString:@"location"]) {
             [array addObject:[[ATLLocationKeyboardViewController alloc] init]];
-        } else if ([dict[@"type"] isEqualToString:@"timesByDay"]) {
-            [array addObject:[[ATLTimesByDayKeyboardViewController alloc] init]];
         } else if ([dict[@"type"] isEqualToString:@"time"]) {
             [array addObject:[[ATLTimeKeyboardViewController alloc] init]];
         }
@@ -100,11 +95,6 @@
     if ((direction == UIPageViewControllerNavigationDirectionForward && _keyboardIndex < (_keyboardArray.count - 1)) ||
         (direction == UIPageViewControllerNavigationDirectionReverse && _keyboardIndex > 0)) {
         _keyboardIndex = (direction == UIPageViewControllerNavigationDirectionForward ? _keyboardIndex + 1 : _keyboardIndex - 1);
-        
-        // update the days if we're going to a TimesByDay keyboard
-        if ([_keyboardArray[_keyboardIndex] isKindOfClass:ATLTimesByDayKeyboardViewController.class]) {
-            [_keyboardArray[_keyboardIndex] setDates:_dates];
-        }
         [self setViewControllers:@[_keyboardArray[_keyboardIndex]]
                        direction:direction
                         animated:YES
@@ -132,8 +122,6 @@
         [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
     }
 }
-
-#pragma mark - Public Functions
 
 - (BOOL)isSubmittable {
     return (_keyboardIndex == (_keyboardArray.count - 1));
@@ -165,10 +153,6 @@
     [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:viewController.selection];
 }
 
-- (NSArray*)getSelectionsArray {
-    return _selections;
-}
-
 - (void)_updateKeyboardType {
     UIViewController *keyboard = _keyboardArray[_keyboardIndex];
     ATLKeyboardType type = ATLKeyboardTypeDefault;
@@ -176,8 +160,6 @@
         type = ATLKeyboardTypePill;
     } else if ([keyboard isKindOfClass:[ATLTimeKeyboardViewController class]]) {
         type = ATLKeyboardTypeTime;
-    } else if ([keyboard isKindOfClass:[ATLTimesByDayKeyboardViewController class]]) {
-        type = ATLKeyboardTypeTimesByDay;
     } else if ([keyboard isKindOfClass:[ATLDateKeyboardViewController class]]) {
         type = ATLKeyboardTypeDate;
     } else if ([keyboard isKindOfClass:[ATLLocationKeyboardViewController class]]) {
@@ -244,9 +226,6 @@
         }
         [_selections setObject:string atIndexedSubscript:_keyboardIndex];
         [self.flowDelegate keyboardFlowViewController:self didUpdateSelection:selection];
-    }
-    if (_keyboardType == ATLKeyboardTypeDate) {
-        _dates = selection;
     }
 }
 

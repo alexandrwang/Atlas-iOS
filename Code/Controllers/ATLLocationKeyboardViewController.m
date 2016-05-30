@@ -89,6 +89,7 @@ const CGFloat kBarHeight = 36.0f;
 - (void)setSelectedAddress:(NSString*)address {
     
     _addressLabel.text = address;
+    [self.delegate popUpCustomKeyboard];
     
 }
 

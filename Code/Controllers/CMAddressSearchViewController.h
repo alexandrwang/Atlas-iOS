@@ -14,6 +14,7 @@
 
 @required
 - (void) setSelectedAddress: (NSString*)address;
+- (void) popUpCustomKeyboard;
 
 @end
 

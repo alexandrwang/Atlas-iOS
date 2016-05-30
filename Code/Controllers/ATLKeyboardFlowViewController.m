@@ -234,6 +234,10 @@
     [self.flowDelegate presentLocationViewController:controller];
 }
 
+- (void)popUpCustomKeyboard {
+    [self.flowDelegate popUpCustomKeyboard];
+}
+
 
 - (void)keyboard:(ATLKeyboardViewController *)keyboard withType:(ATLKeyboardType)type didUpdateSelection:(NSMutableArray *)selection {
     if (_keyboardType == type) {

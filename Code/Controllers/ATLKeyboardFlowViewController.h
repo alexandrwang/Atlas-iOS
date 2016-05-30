@@ -32,6 +32,7 @@
 @protocol ATLKeyboardFlowViewControllerDelegate
 
 - (void)presentLocationViewController:(UINavigationController *)controller;
+- (void)popUpCustomKeyboard;
 - (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didChangeToPage:(NSUInteger)page withType:(ATLKeyboardType)type;
 - (void)keyboardFlowViewController:(ATLKeyboardFlowViewController *)controller didUpdateSelection:(NSMutableArray *)selection;
 

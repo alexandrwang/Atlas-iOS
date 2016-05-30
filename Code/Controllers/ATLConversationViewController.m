@@ -723,7 +723,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         } else {
             [self.messageInputToolbar.rightAccessoryButton setTitle:title forState:UIControlStateNormal];
             self.messageInputToolbar.rightAccessoryButton.hidden = NO;
-            self.messageInputToolbar.rightAccessoryButton.enabled = NO;
+            NSArray* selectionsArray = [_keyboardFlowViewController getSelectionsArray];
+            NSInteger* currentIndex = _keyboardFlowViewController.keyboardIndex;
+            BOOL shouldEnableRightAccessory = ([selectionsArray count] > currentIndex && [selectionsArray[(int)currentIndex] length] > 0);
+            self.messageInputToolbar.rightAccessoryButton.enabled = shouldEnableRightAccessory;
         }
         
         self.messageInputToolbar.textInputView.editable = NO;

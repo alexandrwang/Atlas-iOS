@@ -89,6 +89,8 @@ const CGFloat kBarHeight = 36.0f;
 - (void)setSelectedAddress:(NSString*)address {
     
     _addressLabel.text = address;
+    self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressLabel.text ]];
+    [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];
     [self.delegate popUpCustomKeyboard];
     
 }

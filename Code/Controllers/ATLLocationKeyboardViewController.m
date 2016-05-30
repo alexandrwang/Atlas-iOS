@@ -92,6 +92,7 @@ const CGFloat kBarHeight = 36.0f;
     self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressLabel.text ]];
     [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];
     [self.delegate popUpCustomKeyboard];
+    [self _centerToSelectedAddress:address];
     
 }
 
@@ -116,12 +117,33 @@ const CGFloat kBarHeight = 36.0f;
                                        kBarHeight, kBarHeight);
 }
 
+- (void)_centerToSelectedAddress:(NSString*)address {
+    NSString *location = [address copy];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:location
+                 completionHandler:^(NSArray* placemarks, NSError* error){
+                     if (placemarks && placemarks.count > 0) {
+                         CLPlacemark *topResult = [placemarks objectAtIndex:0];
+                         MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:topResult];
+                         
+                         MKCoordinateRegion region = _mapView.region;
+                         region.center = placemark.region.center;
+                         region.span.longitudeDelta /= 8.0;
+                         region.span.latitudeDelta /= 8.0;
+                         
+                         [_mapView setRegion:region animated:YES];
+                         [_mapView addAnnotation:placemark];
+                     }
+                 }
+     ];
+}
+
 - (void)_centerToUserLocation {
     MKCoordinateRegion region;
     region.center = _mapView.userLocation.coordinate;
     MKCoordinateSpan span;
-    span.latitudeDelta  = 1;
-    span.longitudeDelta = 1;
+    span.latitudeDelta  = 0.1;
+    span.longitudeDelta = 0.1;
     region.span = span;
     [_mapView setRegion:region animated:YES];
 
@@ -131,7 +153,7 @@ const CGFloat kBarHeight = 36.0f;
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        if (!error) {
                            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                           _addressLabel.text = placemark.name;
+                           _addressLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.name, placemark.locality, placemark.administrativeArea];
                            _addressLabel.textColor = [UIColor blackColor];
                            self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressLabel.text ]];
                            [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];

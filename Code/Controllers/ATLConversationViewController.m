@@ -1557,12 +1557,27 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     if (!_firstLoad && _keyboardMode != ATLKeyboardModeSystem) {
         _firstLoad = YES;
-        [self popUpCustomKeyboard];
-        UITapGestureRecognizer *singleFingerTap =
-        [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                action:@selector(textTapped:)];
+        if (!self.customKeyboardInputViewController) {
+            _keyboardFlowViewController = [[ATLKeyboardFlowViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+            _keyboardFlowViewController.flowDelegate = self;
+            self.customKeyboardInputViewController = _keyboardFlowViewController;
+            
+            UITapGestureRecognizer *singleFingerTap =
+            [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                    action:@selector(textTapped:)];
+            
+            [self.messageInputToolbar.textInputView addGestureRecognizer:singleFingerTap];
+        }
         
-        [self.messageInputToolbar.textInputView addGestureRecognizer:singleFingerTap];
+        if (!self.messageInputToolbar.textInputView.inputView) {
+            _keyboardMode = ATLKeyboardModeCustom;
+            [self.messageInputToolbar endEditing:YES];
+            self.messageInputToolbar.textInputView.inputView = self.customKeyboardInputViewController.view;
+            [self.messageInputToolbar.textInputView reloadInputViews];
+            [self.messageInputToolbar.textInputView becomeFirstResponder];
+            [_messageInputToolbar switchToCustomKeyboard];
+            [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:_keyboardFlowViewController.keyboardType];
+        }
     } else if (_keyboardMode != ATLKeyboardModeCustom)  {
         _keyboardMode = ATLKeyboardModeSystem;
         //        [self.messageInputToolbar endEditing:YES];

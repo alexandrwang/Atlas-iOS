@@ -93,6 +93,10 @@ const CGFloat kBarHeight = 36.0f;
     
 }
 
+- (void)popUpCustomKeyboard {
+    [self.delegate popUpCustomKeyboard];
+}
+
 
 - (void)viewDidLayoutSubviews {
     // Layout our UI.

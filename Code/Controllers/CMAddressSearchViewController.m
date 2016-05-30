@@ -51,7 +51,9 @@
 
 - (void)cancel:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [_delegate popUpCustomKeyboard];
+    }];
 }
 
 - (BOOL)shouldAutomaticallyForwardAppearanceMethods {

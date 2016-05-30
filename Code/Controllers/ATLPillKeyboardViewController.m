@@ -73,7 +73,6 @@
 
 - (void)configureCell:(ATLPillKeyboardCollectionViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     [cell setLabelText:self.dataSourceArray[indexPath.row % self.dataSourceArray.count]];
-//    cell.labelText = @"Primary Care";
     [self.collectionView.collectionViewLayout invalidateLayout];
 }
 

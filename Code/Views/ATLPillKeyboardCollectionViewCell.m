@@ -66,11 +66,14 @@
     self.stringLabel.text = labelText;
     UIImage *image = [self _pillImage][labelText];
     _imageView.image = image;
-//    [self.contentView removeConstraints:_horizontalConstraints];
-//    _horizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-55-[_stringLabel]-15-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_stringLabel)];
-//    [self.contentView addConstraints:_horizontalConstraints];
+
     [self setNeedsLayout];
     [self setNeedsDisplay];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    [super setBounds:bounds];
+    self.contentView.frame = bounds;
 }
 
 - (NSString *)labelText {

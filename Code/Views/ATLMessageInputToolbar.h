@@ -64,6 +64,11 @@ extern NSString *const ATLMessageInputToolbarAccessibilityLabel;
  */
 - (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapKeyboardButton:(UIButton *)keyboardButton;
 
+/**
+ @abstract Notifies the receiver that the camera button was tapped.
+ */
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapCameraButton:(UITextView *)inputView;
+
 @optional
 
 /**

@@ -700,6 +700,25 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     }
 }
 
+- (void)messageInputToolbar:(ATLMessageInputToolbar *)messageInputToolbar didTapCameraButton:(UITextView *)inputView {
+    
+    _keyboardMode = ATLKeyboardModeSystem;
+    //    [self.messageInputToolbar endEditing:YES];
+    [self.messageInputToolbar.textInputView resignFirstResponder];
+    self.messageInputToolbar.textInputView.inputView = nil;
+    [self.messageInputToolbar.textInputView reloadInputViews];
+    [messageInputToolbar switchToNoKeyboard];
+    [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:ATLKeyboardTypeDefault];
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.cancel.key", @"Cancel", nil)
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.takephoto.key", @"Take Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.lastphoto.key", @"Last Photo/Video", nil), ATLLocalizedString(@"atl.conversation.toolbar.actionsheet.library.key", @"Photo/Video Library", nil), nil];
+    [actionSheet showInView:self.view];
+    actionSheet.tag = ATLPhotoActionSheet;
+}
+
 - (void)messageInputToolbarDidType:(ATLMessageInputToolbar *)messageInputToolbar {
     if (!self.conversation) return;
     [self.conversation sendTypingIndicator:LYRTypingDidBegin];
@@ -897,8 +916,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
                 [self displayImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                 break;
                 
-            default:
+            default: {
+                [self updateInputToolbarButtonsWithPage:_keyboardFlowViewController.keyboardIndex type:ATLKeyboardTypeNone];
                 break;
+            }
         }
     }
 }

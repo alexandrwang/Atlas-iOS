@@ -35,6 +35,7 @@ NSString *const ATLMessageInputToolbarDidChangeHeightNotification = @"ATLMessage
 @property (nonatomic) UIView *hairlineView;
 @property (nonatomic) UIView *buttonBarView;
 @property (nonatomic) UIButton *keyboardButton;
+@property (nonatomic) UIButton *cameraButton;
 
 @end
 
@@ -85,6 +86,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         NSBundle *resourcesBundle = ATLResourcesBundle();
         self.leftAccessoryImage = [UIImage imageNamed:@"custom_inactive" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         UIImage *keyboardImage = [UIImage imageNamed:@"keyboard_inactive" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
+        UIImage *cameraImage = [UIImage imageNamed:@"pt" inBundle:resourcesBundle compatibleWithTraitCollection:nil];
         self.rightAccessoryButton.backgroundColor = [UIColor redColor];
         self.displaysRightAccessoryImage = YES;
         self.firstAppearance = YES;
@@ -102,6 +104,13 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
         [self.keyboardButton setImage:keyboardImage forState:UIControlStateNormal];
         [self.keyboardButton addTarget:self action:@selector(keyboardButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         [self.buttonBarView addSubview:self.keyboardButton];
+        
+        // Camera button
+        self.cameraButton = [[UIButton alloc] init];
+        self.cameraButton.contentMode = UIViewContentModeScaleAspectFit;
+        [self.cameraButton setImage:cameraImage forState:UIControlStateNormal];
+        [self.cameraButton addTarget:self action:@selector(cameraButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.buttonBarView addSubview:self.cameraButton];
 
         // Go Back Button
         self.goBackButton = [[UIButton alloc] init];
@@ -164,11 +173,13 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
     CGRect keyboardButtonFrame = self.keyboardButton.frame;
     CGRect leftButtonFrame = self.leftAccessoryButton.frame;
     CGRect goBackButtonFrame = self.goBackButton.frame;
+    CGRect cameraButtonFrame = self.cameraButton.frame;
     CGRect rightButtonFrame = self.rightAccessoryButton.frame;
     CGRect textViewFrame = self.textInputView.frame;
 
     keyboardButtonFrame.size.width = (self.keyboardButton ? ATLLeftAccessoryButtonWidth : 0);
     leftButtonFrame.size.width = (self.keyboardButton ? ATLLeftAccessoryButtonWidth : 0);
+    cameraButtonFrame.size.width = (self.keyboardButton ? ATLLeftAccessoryButtonWidth : 0);
     goBackButtonFrame.size = [_goBackButton sizeThatFits:CGSizeZero];
     rightButtonFrame.size = [_rightAccessoryButton sizeThatFits:CGSizeZero];
     rightButtonFrame.size.width = 50.0f;
@@ -184,8 +195,10 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
     keyboardButtonFrame.origin.x = ATLLeftButtonHorizontalMargin;
     leftButtonFrame.size.height = ATLButtonHeight;
     leftButtonFrame.origin.x = CGRectGetMaxX(keyboardButtonFrame) + ATLButtonSpacing;
+    cameraButtonFrame.size.height = ATLButtonHeight;
+    cameraButtonFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLButtonSpacing;
     goBackButtonFrame.size.height = ATLButtonHeight;
-    goBackButtonFrame.origin.x = CGRectGetMaxX(leftButtonFrame) + ATLButtonSpacing;
+    goBackButtonFrame.origin.x = CGRectGetMaxX(cameraButtonFrame) + ATLButtonSpacing;
 
     rightButtonFrame.size.height = ATLButtonHeight;
     rightButtonFrame.origin.x = CGRectGetWidth(frame) - CGRectGetWidth(rightButtonFrame) - ATLRightButtonHorizontalMargin;
@@ -206,6 +219,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
     leftButtonFrame.origin.y = (ATLButtonBarHeight - leftButtonFrame.size.height) / 2;
     keyboardButtonFrame.origin.y = (ATLButtonBarHeight - keyboardButtonFrame.size.height) / 2;
+    cameraButtonFrame.origin.y = (ATLButtonBarHeight - cameraButtonFrame.size.height) / 2;
     goBackButtonFrame.origin.y = (ATLButtonBarHeight - goBackButtonFrame.size.height) / 2;
     rightButtonFrame.origin.y = (ATLButtonBarHeight - rightButtonFrame.size.height) / 2;
     
@@ -213,6 +227,7 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 
     self.leftAccessoryButton.frame = leftButtonFrame;
     self.keyboardButton.frame = keyboardButtonFrame;
+    self.cameraButton.frame = cameraButtonFrame;
     self.goBackButton.frame = goBackButtonFrame;
     self.rightAccessoryButton.frame = rightButtonFrame;
     self.textInputView.frame = textViewFrame;
@@ -350,6 +365,11 @@ static CGFloat const ATLButtonBarHeight = 44.0f;
 - (void)keyboardButtonTapped
 {
     [self.inputToolBarDelegate messageInputToolbar:self didTapKeyboardButton:self.keyboardButton];
+}
+
+- (void)cameraButtonTapped
+{
+    [self.inputToolBarDelegate messageInputToolbar:self didTapCameraButton:self.cameraButton];
 }
 
 - (void)goBackButtonTapped

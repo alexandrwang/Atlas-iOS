@@ -44,7 +44,8 @@
 UICollectionViewDelegate,
 CLLocationManagerDelegate,
 ATLKeyboardFlowViewControllerDelegate,
-UITextViewDelegate >
+UITextViewDelegate,
+UIImagePickerControllerDelegate >
 
 @property (nonatomic) ATLConversationDataSource *conversationDataSource;
 @property (nonatomic, readwrite) LYRQueryController *queryController;
@@ -936,7 +937,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:sourceType];
         picker.sourceType = sourceType;
         picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
-        [self.navigationController presentViewController:picker animated:YES completion:nil];
+        [self presentViewController:picker animated:YES completion:nil];
     }
 }
 
@@ -975,8 +976,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (mediaAttachment) {
         [self.messageInputToolbar insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
     }
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    [self.view becomeFirstResponder];
+    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self.view becomeFirstResponder];
+    self.messageInputToolbar.rightAccessoryButton.hidden = NO;
+    self.messageInputToolbar.rightAccessoryButton.enabled = YES;
+    [self.messageInputToolbar.rightAccessoryButton setTitle:@"Send" forState:UIControlStateNormal];
+
     
     // Workaround for collection view not displayed on iOS 7.1.
     [self.collectionView setNeedsLayout];
@@ -984,8 +989,8 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    [self.view becomeFirstResponder];
+    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self.view becomeFirstResponder];
     
     // Workaround for collection view not displayed on iOS 7.1.
     [self.collectionView setNeedsLayout];

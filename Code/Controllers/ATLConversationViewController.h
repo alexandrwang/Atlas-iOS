@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
  a Layer conversation and the ability to send messages. The controller's design and functionality closely correlates with
  the conversation view controller in Messages.
 */
-@interface ATLConversationViewController : ATLBaseConversationViewController <ATLAddressBarViewControllerDelegate, ATLMessageInputToolbarDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LYRQueryControllerDelegate>
+@interface ATLConversationViewController : ATLBaseConversationViewController <ATLAddressBarViewControllerDelegate, ATLMessageInputToolbarDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LYRQueryControllerDelegate, UIImagePickerControllerDelegate>
 
 ///---------------------------------------
 /// @name Initializing a Controller

@@ -61,6 +61,11 @@
                              ];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.collectionView performSelector:@selector(flashScrollIndicators) withObject:nil afterDelay:0];
+}
+
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];

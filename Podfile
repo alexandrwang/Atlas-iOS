@@ -5,6 +5,8 @@ use_frameworks!
 
 target 'Programmatic' do
   pod 'Atlas', path: '.'
+  pod 'GoogleAPIClient/Calendar', '~> 1.0.2'
+  pod 'GTMOAuth2', '~> 1.1.0'
 end
 
 target 'Storyboard' do

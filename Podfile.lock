@@ -1,7 +1,19 @@
 PODS:
-  - Atlas (1.0.22):
+  - Atlas (1.0.23):
     - LayerKit (>= 0.21.0)
   - Expecta (1.0.5)
+  - GoogleAPIClient/Calendar (1.0.4):
+    - GoogleAPIClient/Core
+    - GTMSessionFetcher (~> 1.1)
+  - GoogleAPIClient/Core (1.0.4):
+    - GTMSessionFetcher (~> 1.1)
+  - GTMOAuth2 (1.1.1):
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.1.4):
+    - GTMSessionFetcher/Full (= 1.1.4)
+  - GTMSessionFetcher/Core (1.1.4)
+  - GTMSessionFetcher/Full (1.1.4):
+    - GTMSessionFetcher/Core (= 1.1.4)
   - KIF (3.4.2):
     - KIF/Core (= 3.4.2)
   - KIF/Core (3.4.2)
@@ -14,6 +26,8 @@ PODS:
 DEPENDENCIES:
   - Atlas (from `.`)
   - Expecta
+  - GoogleAPIClient/Calendar (~> 1.0.2)
+  - GTMOAuth2 (~> 1.1.0)
   - KIF
   - KIFViewControllerActions (from `https://github.com/blakewatters/KIFViewControllerActions.git`)
   - LYRCountDownLatch (from `https://github.com/layerhq/LYRCountDownLatch.git`)
@@ -21,7 +35,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Atlas:
-    :path: "."
+    :path: .
   KIFViewControllerActions:
     :git: https://github.com/blakewatters/KIFViewControllerActions.git
   LYRCountDownLatch:
@@ -36,14 +50,17 @@ CHECKOUT OPTIONS:
     :git: https://github.com/layerhq/LYRCountDownLatch.git
 
 SPEC CHECKSUMS:
-  Atlas: cf9f1792cc9d9992ec8b3de1f4f62e5ab9ab9eff
+  Atlas: acf154ee2a10c6257a47e872366154653932302f
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
+  GoogleAPIClient: 4dedb6af613eb7d171814c343f8a82ee5411e13b
+  GTMOAuth2: bdb12f3e0d2110bfe585f6151230b883beb4d042
+  GTMSessionFetcher: 174bc61d5238f81f9ddb807b0b0170420f67de85
   KIF: b518c9831453abea5afdbbde3908ec47832d6d56
   KIFViewControllerActions: 8d2f9ec9f185fa70ca9f54a297de544afe71ea55
   LayerKit: 1c1d3efd7dd1eb432230bd56253ab3ef36a25637
   LYRCountDownLatch: 9b440b42a19ddbf4e75bdd4b43726baa1527606a
   OCMock: d68685bde31f69cb61d518dcb39269080c78b5ed
 
-PODFILE CHECKSUM: 31c94cbd9f9d85fc7e9aae02109733cba464cd83
+PODFILE CHECKSUM: 5d7f0c6c9a80ebaba2eae2138fdb433a802cdbda
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.0.1

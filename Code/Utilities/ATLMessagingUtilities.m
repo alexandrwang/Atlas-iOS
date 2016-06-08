@@ -35,7 +35,7 @@ NSString *const ATLMIMETypeImageGIFPreview = @"image/gif+preview";
 NSString *const ATLMIMETypeLocation = @"location/coordinate";
 NSString *const ATLMIMETypeDate = @"text/date";
 NSString *const ATLMIMETypeVideoMP4 = @"video/mp4";
-NSUInteger const ATLDefaultThumbnailSize = 512;
+NSUInteger const ATLDefaultThumbnailSize = 1024;
 NSUInteger const ATLDefaultGIFThumbnailSize = 64;
 
 NSString *const ATLPasteboardImageKey = @"image";

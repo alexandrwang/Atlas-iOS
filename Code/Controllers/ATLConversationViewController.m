@@ -949,6 +949,9 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         } else {
             ATLMediaAttachment *mediaAttachment = [ATLMediaAttachment mediaAttachmentWithAssetURL:assetURL thumbnailSize:ATLDefaultThumbnailSize];
             [self.messageInputToolbar insertMediaAttachment:mediaAttachment withEndLineBreak:YES];
+            self.messageInputToolbar.rightAccessoryButton.hidden = NO;
+            self.messageInputToolbar.rightAccessoryButton.enabled = YES;
+            [self.messageInputToolbar.rightAccessoryButton setTitle:@"Send" forState:UIControlStateNormal];
         }
     });
 }

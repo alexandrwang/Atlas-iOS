@@ -59,7 +59,7 @@ UIImageOrientation ATLMediaAttachmentVideoOrientationForAVAssetTrack(AVAssetTrac
 static int const ATLMediaAttachmentTIFFOrientationToImageOrientationMap[9] = { 0, 0, 6, 1, 5, 4, 4, 7, 2 };
 static char const ATLMediaAttachmentAsyncToBlockingQueueName[] = "com.layer.Atlas.ATLMediaAttachment.blocking";
 static NSUInteger const ATLMediaAttachmentDataFromStreamBufferSize = 1024 * 1024;
-static float const ATLMediaAttachmentDefaultThumbnailJPEGCompression = 0.5f;
+static float const ATLMediaAttachmentDefaultThumbnailJPEGCompression = 0.9f;
 
 #pragma mark - Private class definitions
 

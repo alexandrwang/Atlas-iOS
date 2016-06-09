@@ -74,7 +74,7 @@ NSInteger const ATLQueryControllerPaginationWindow = 30;
             return nil;
         }
 //        _queryController.updatableProperties = [NSSet setWithObjects:@"parts.transferStatus", @"recipientStatusByUserID", @"sentAt", nil];
-        _queryController.updatableProperties = [NSSet setWithObjects:@"parts.transferStatus", @"sentAt", nil];
+        _queryController.updatableProperties = [NSSet setWithObjects:@"isUnread", nil];
 
         _queryController.paginationWindow = -numberOfMessagesToDisplay;
         

@@ -27,7 +27,7 @@ const CGFloat kVerticalSpacing = 8.0f;
 
 - (id)init {
     self = [super init];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor whiteColor];
 
     self.flowLayout = [[UICollectionViewFlowLayout alloc] init];
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;

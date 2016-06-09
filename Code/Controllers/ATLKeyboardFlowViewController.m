@@ -42,15 +42,11 @@
                               @{ @"text" : @"[pick location, press next]",
                                  @"type" : @"location"},
                               
-                              @{ @"text" : @" on ",
+                              @{ @"text" : @" at any open time on my calendar, but I prefer these times: ",
                                  @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick dates, press next]",
-                                 @"type" : @"date"},
                               
-                              @{ @"text" : @" at times ",
-                                 @"type" : @"plaintext"},
-                              @{ @"text" : @"[pick times for each day, press send]",
-                                 @"type" : @"timesByDay"},
+                              @{ @"text" : @"[pick times, press send]",
+                                 @"type" : @"time"},
                             ]};
 }
 
@@ -67,7 +63,9 @@
         } else if ([dict[@"type"] isEqualToString:@"timesByDay"]) {
             [array addObject:[[ATLTimesByDayKeyboardViewController alloc] init]];
         } else if ([dict[@"type"] isEqualToString:@"time"]) {
-            [array addObject:[[ATLTimeKeyboardViewController alloc] init]];
+            ATLTimeKeyboardViewController *tkvc = [[ATLTimeKeyboardViewController alloc] init];
+            [tkvc setupDateLabel:@"Preferred Times"];
+            [array addObject:tkvc];
         }
     }
 

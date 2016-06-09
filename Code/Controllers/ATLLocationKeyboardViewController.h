@@ -11,6 +11,5 @@
 
 @interface ATLLocationKeyboardViewController : ATLKeyboardViewController
 
-@property (nonatomic, strong) UILabel *addressLabel;
 
 @end

@@ -13,7 +13,7 @@
 #import "CMAddressSearchViewController.h"
 
 @interface ATLLocationKeyboardViewController () < MKMapViewDelegate,
-                                                  CLLocationManagerDelegate, CMAddressSearchDelegate >
+CLLocationManagerDelegate, CMAddressSearchDelegate >
 @end
 
 const CGFloat kPaddingHorizontal = 14.0f;
@@ -21,47 +21,40 @@ const CGFloat kBarHeight = 36.0f;
 
 @implementation ATLLocationKeyboardViewController {
     MKMapView *_mapView;
-    UIView *_addressBar;
-//    UILabel *_addressLabel;
     UIButton *_locationButton;
     CLLocation *_initialLocation;
     CLLocationManager *_locationManager;
+    UIButton *_addressBarButton;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self startLocationManager];
-
+    
     // Add our UI components.
     _mapView = [[MKMapView alloc] init];
     _mapView.showsUserLocation = YES;
     _mapView.delegate = self;
     _mapView.tintColor = [UIColor colorWithRed:0.329 green:0.725 blue:0.882 alpha:1];
     [self.view addSubview:_mapView];
-
+    
     [self _centerToUserLocation];
-
-    _addressBar = [[UIView alloc] init];
-    _addressBar.backgroundColor = [UIColor whiteColor];
-    _addressBar.layer.cornerRadius = kBarHeight / 2.0f;
-    _addressBar.layer.shadowColor = [UIColor blackColor].CGColor;
-    _addressBar.layer.shadowRadius = 2.0f;
-    _addressBar.clipsToBounds = YES;
     
-    UITapGestureRecognizer *singleFingerTap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(addressTapped:)];
-    [_addressBar addGestureRecognizer:singleFingerTap];
+    _addressBarButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _addressBarButton.contentMode = UIViewContentModeCenter;
+    _addressBarButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [_addressBarButton setBackgroundColor:[UIColor whiteColor]];
+    _addressBarButton.layer.cornerRadius = kBarHeight/2.0f;
+    _addressBarButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    _addressBarButton.layer.shadowRadius = 2.0f;
+    _addressBarButton.clipsToBounds = YES;
+    [_addressBarButton addTarget:self action:@selector(addressTapped) forControlEvents:UIControlEventTouchUpInside];
+    [_addressBarButton setTitle:@"Select Location" forState:UIControlStateNormal];
+    [_addressBarButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [_addressBarButton.titleLabel setFont:[UIFont fontWithName:@"AvenirNext-Medium" size:17.0f]];
+    [self.view addSubview:_addressBarButton];
     
-    [self.view addSubview:_addressBar];
-
-    _addressLabel = [[UILabel alloc] init];
-    _addressLabel.text = @"Select Location";
-    _addressLabel.textColor = [UIColor grayColor];
-    _addressLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:17.0f];
-    [self.view addSubview:_addressLabel];
-
     NSBundle *resourcesBundle = ATLResourcesBundle();
     _locationButton = [[UIButton alloc] init];
     [_locationButton setImage:[UIImage imageNamed:@"location_dark" inBundle:resourcesBundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
@@ -70,8 +63,7 @@ const CGFloat kBarHeight = 36.0f;
 }
 
 //The event handling method
-- (void)addressTapped:(UITapGestureRecognizer *)recognizer {
-    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+- (void)addressTapped {
     
     CMAddressSearchViewController *atvc = [[CMAddressSearchViewController alloc] init];
     
@@ -88,8 +80,8 @@ const CGFloat kBarHeight = 36.0f;
 
 - (void)setSelectedAddress:(NSString*)address {
     
-    _addressLabel.text = address;
-    self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressLabel.text ]];
+    [_addressBarButton setTitle:address forState:UIControlStateNormal];
+    self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressBarButton.titleLabel.text ]];
     [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];
     [self.delegate popUpCustomKeyboard];
     [self _centerToSelectedAddress:address];
@@ -104,14 +96,14 @@ const CGFloat kBarHeight = 36.0f;
 - (void)viewDidLayoutSubviews {
     // Layout our UI.
     _mapView.frame = self.view.bounds;
-    _addressBar.frame = CGRectMake(kPaddingHorizontal,
-                                   self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,
-                                   self.view.bounds.size.width - kPaddingHorizontal * 3 - kBarHeight,
-                                   kBarHeight);
-    _addressLabel.frame = CGRectMake(kPaddingHorizontal * 2,
-                                     self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,
-                                     self.view.bounds.size.width - kPaddingHorizontal * 3 - kBarHeight - 15,
-                                     kBarHeight);
+    _addressBarButton.frame = CGRectMake(kPaddingHorizontal,
+                                         self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,
+                                         self.view.bounds.size.width - kPaddingHorizontal * 3 - kBarHeight,
+                                         kBarHeight);
+    _addressBarButton.titleLabel.frame = CGRectMake(kPaddingHorizontal * 2,
+                                                    self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,
+                                                    self.view.bounds.size.width - kPaddingHorizontal * 3 - kBarHeight - 15,
+                                                    kBarHeight);
     _locationButton.frame = CGRectMake(self.view.bounds.size.width - kPaddingHorizontal - kBarHeight,
                                        self.view.bounds.size.height - kPaddingHorizontal - kBarHeight,
                                        kBarHeight, kBarHeight);
@@ -146,16 +138,16 @@ const CGFloat kBarHeight = 36.0f;
     span.longitudeDelta = 0.1;
     region.span = span;
     [_mapView setRegion:region animated:YES];
-
+    
     CLGeocoder *geocoder = [[CLGeocoder alloc]init];
-
+    
     [geocoder reverseGeocodeLocation:_mapView.userLocation.location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        if (!error) {
                            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                           _addressLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.name, placemark.locality, placemark.administrativeArea];
-                           _addressLabel.textColor = [UIColor blackColor];
-                           self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressLabel.text ]];
+                           _addressBarButton.titleLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.name, placemark.locality, placemark.administrativeArea];
+                           _addressBarButton.titleLabel.textColor = [UIColor blackColor];
+                           self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressBarButton.titleLabel.text ]];
                            [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];
                        }
                    }

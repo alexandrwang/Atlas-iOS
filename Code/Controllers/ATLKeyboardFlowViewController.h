@@ -19,6 +19,7 @@
 - (void)fillInAllFields;
 - (void)resetMessageField;
 - (NSArray*)getSelectionsArray;
+- (NSInteger*)keyboardCount;
 
 @property (nonatomic, weak) id<ATLKeyboardFlowViewControllerDelegate> flowDelegate;
 @property (nonatomic, assign) NSUInteger keyboardIndex;

@@ -170,6 +170,10 @@
     return _selections;
 }
 
+- (NSInteger*)keyboardCount {
+    return [_keyboardArray count];
+}
+
 - (void)_updateKeyboardType {
     UIViewController *keyboard = _keyboardArray[_keyboardIndex];
     ATLKeyboardType type = ATLKeyboardTypeDefault;

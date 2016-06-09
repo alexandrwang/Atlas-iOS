@@ -737,7 +737,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         
     } else if (_keyboardMode == ATLKeyboardModeCustom) {
         self.messageInputToolbar.goBackButton.hidden = (page == 0 ? YES : NO);
-        NSString *title = (page == 3 ? @"Send" : @"Next");
+        NSString *title = ((page == (int)[_keyboardFlowViewController keyboardCount] - 1) ? @"Send" : @"Next");
         if (type == ATLKeyboardTypePill) {
             self.messageInputToolbar.rightAccessoryButton.hidden = YES;
         } else {

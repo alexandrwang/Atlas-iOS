@@ -145,7 +145,7 @@ const CGFloat kBarHeight = 36.0f;
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        if (!error) {
                            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                           _addressBarButton.titleLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.name, placemark.locality, placemark.administrativeArea];
+                           [_addressBarButton setTitle:[NSString stringWithFormat:@"%@, %@, %@", placemark.name, placemark.locality, placemark.administrativeArea] forState:UIControlStateNormal];
                            _addressBarButton.titleLabel.textColor = [UIColor blackColor];
                            self.selection = [[NSMutableArray alloc] initWithArray:@[ _addressBarButton.titleLabel.text ]];
                            [self.delegate keyboard:self withType:ATLKeyboardTypeLocation didUpdateSelection:self.selection];

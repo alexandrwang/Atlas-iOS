@@ -140,10 +140,10 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
     }
     
     if (self.isFirstAppearance) {
-        self.firstAppearance = NO;
         // We use the content size of the actual collection view when calculating the ammount to scroll. Hence, we layout the collection view before scrolling to the bottom.
         [self.view layoutIfNeeded];
         [self scrollToBottomAnimated:NO];
+        self.firstAppearance = NO;
     }
 }
 
@@ -197,6 +197,9 @@ static CGFloat const ATLMaxScrollDistanceFromBottom = 150;
 - (void)scrollToBottomAnimated:(BOOL)animated
 {
     CGSize contentSize = self.collectionView.contentSize;
+    if (self.isFirstAppearance) {
+        contentSize = self.collectionView.collectionViewLayout.collectionViewContentSize;
+    }
     [self.collectionView setContentOffset:[self bottomOffsetForContentSize:contentSize] animated:animated];
 }
 
